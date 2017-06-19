@@ -4,4 +4,4 @@ sudo /etc/init.d/bluetooth stop
 
 cmd="sudo /usr/sbin/bluetoothd --nodetach --debug -p time"
 
-nohup $cmd &>/dev/null &
+$cmd &>/dev/null &
