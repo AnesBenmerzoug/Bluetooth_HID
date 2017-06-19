@@ -68,8 +68,8 @@ class BluetoothKbBluezProfile(dbus.service.Object):
 #
 class BluetoothKbDevice():
     # change these constants
-    MY_ADDRESS = "00:1A:7D:DA:71:13"
-    MY_DEV_NAME = "DeskPi_BTKb"
+    MY_ADDRESS = "B8:27:EB:B6:8C:21"
+    MY_DEV_NAME = "Bluetooth_Keyboard"
 
     # define some constants
     P_CTRL = 17  # Service port - must match port configured in SDP record
