@@ -1,7 +1,15 @@
 #!/bin/bash
 
-sudo /etc/init.d/bluetooth stop
+echo "Bluetooth Initilization"
 
-cmd="sudo /usr/sbin/bluetoothd --nodetach --debug -p time"
+cmd1="sudo /etc/init.d/bluetooth stop"
 
-$cmd &>/dev/null &
+cmd2="sudo /usr/sbin/bluetoothd --nodetach --debug -p time"
+
+cmd3="sudo hciconfig hci"
+
+$cmd1 &>/dev/null &
+
+$cmd2 &>/dev/null &
+
+$cmd3 &>/dev/null &
