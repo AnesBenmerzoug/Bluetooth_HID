@@ -41,7 +41,7 @@
 		<sequence>
 			<sequence>
 				<uuid value="0x1124" /> <!-- Human Interface Device -->
-				<uint16 value="0x0100" />
+				<uint16 value="0x0100" /> <!-- L2CAP -->
 			</sequence>
 		</sequence>
 	</attribute>
@@ -49,11 +49,11 @@
 		<sequence>
 			<sequence>
 				<sequence>
-					<uuid value="0x0100" />
+					<uuid value="0x0100" /> <!-- L2CAP -->
 					<uint16 value="0x0013" />
 				</sequence>
 				<sequence>
-					<uuid value="0x0011" />
+					<uuid value="0x0011" /> <!-- HIDP -->
 				</sequence>
 			</sequence>
 		</sequence>
@@ -62,7 +62,7 @@
 		<text value="Raspberry Pi Virtual Keyboard and Mouse" />
 	</attribute>
 	<attribute id="0x0101">
-		<text value="USB > BT Keyboard and Mouse" />
+		<text value="USB > BT Keyboard/Mouse" />
 	</attribute>
 	<attribute id="0x0102">
 		<text value="Raspberry Pi 3" />

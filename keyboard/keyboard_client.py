@@ -13,7 +13,7 @@ import dbus.service
 import dbus.mainloop.glib
 import time
 import evdev  # used to get input from the keyboard
-from evdev import *
+from evdev import InputDevice, ecodes
 import keymap  # used to map evdev input to hide key codes
 
 

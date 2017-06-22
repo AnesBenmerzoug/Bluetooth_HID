@@ -69,7 +69,7 @@ class BluetoothKbBluezProfile(dbus.service.Object):
 class BluetoothKbDevice():
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
-    MY_DEV_NAME = "Bluetooth_Keyboard"
+    MY_DEV_NAME = "Bluetooth_Keyboard_Mouse"
 
     # define some constants
     P_CTRL = 17  # Service port - must match port configured in SDP record
@@ -91,7 +91,8 @@ class BluetoothKbDevice():
         print("Configuring for name " + BluetoothKbDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
-        os.system("hciconfig hcio class 0x002540")
+        #os.system("hciconfig hcio class 0x002540")
+        os.system("hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
         os.system("hciconfig hcio name " + BluetoothKbDevice.MY_DEV_NAME)
 
         # make the device discoverable
@@ -167,10 +168,10 @@ class BluetoothKbDevice():
         self.cinterrupt.send(message)
 
 
-# define a dbus service that emulates a bluetooth keyboard
+# define a dbus service that emulates a bluetooth keyboard and mouse
 # this will enable different clients to connect to and use
 # the service
-class BluetoothKbService(dbus.service.Object):
+class BluetoothService(dbus.service.Object):
     def __init__(self):
 
         print("Setting up service")
@@ -202,6 +203,20 @@ class BluetoothKbService(dbus.service.Object):
 
         self.device.send_string(cmd_str)
 
+    @dbus.service.method('org.upwork.HidBluetooth', in_signature='yyy')
+    def send_mouse(self, buttons, x, y):
+
+        cmd_str = ""
+        cmd_str += chr(0xA1)
+        cmd_str += chr(0x02)
+        cmd_str += chr(buttons)
+        cmd_str += chr(x)
+        cmd_str += chr(y)
+        cmd_str += chr(0x00)
+        cmd_str += chr(0x00)
+        cmd_str += chr(0x00)
+
+        self.device.send_string(cmd_str)
 
 # main routine
 if __name__ == "__main__":
@@ -210,5 +225,5 @@ if __name__ == "__main__":
         sys.exit("Only root can run this script")
 
     DBusGMainLoop(set_as_default=True)
-    myservice = BluetoothKbService()
+    myservice = BluetoothService()
     gtk.main()
