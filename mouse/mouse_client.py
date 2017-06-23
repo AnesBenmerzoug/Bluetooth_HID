@@ -49,15 +49,16 @@ class Mouse():
         have_dev = False
         while have_dev == False:
             try:
-                # try and get a mouse - should always be event1 as
-                # we're only plugging one thing in
-                for fn in 
-                self.dev = InputDevice("/dev/input/event1")
-                have_dev = True
+                # try and get a mouse - loop through all devices and try to find a mouse
+                devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+                for device in devices:
+                    if "mouse" in device.name.lower():
+                        self.dev = InputDevice(device.fn)
+                        have_dev = True
             except OSError:
                 print "Mouse not found, waiting 3 seconds and retrying"
                 time.sleep(3)
-            print "Mouse Found"
+        print "Mouse Found"
 
     def change_state_button(self, event):
         evdev_code = ecodes.KEY[event.code]
@@ -66,6 +67,8 @@ class Mouse():
             print "Left Mouse Button Pressed"
         elif evdev_code == ecodes.BTN_RIGHT:
             print "Right Mouse Button Pressed"
+        elif evdev_code == ecodes.BTN_MIDDLE:
+            print "Middle Mouse Button Pressed"
 
     def change_state_movement(self, event):
         print event

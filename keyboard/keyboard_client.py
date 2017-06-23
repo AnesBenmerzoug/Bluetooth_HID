@@ -54,14 +54,16 @@ class Keyboard():
         have_dev = False
         while have_dev == False:
             try:
-                # try and get a keyboard - should always be event0 as
-                # we're only plugging one thing in
-                self.dev = InputDevice("/dev/input/event0")
-                have_dev = True
+                # try and get a keyboard - loop through all devices and try to find a keyboard
+                devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+                for device in devices:
+                    if "keyboard" in device.name.lower():
+                        self.dev = InputDevice(device.fn)
+                        have_dev = True
             except OSError:
                 print "Keyboard not found, waiting 3 seconds and retrying"
                 time.sleep(3)
-            print "Keyboard Found"
+        print "Keyboard Found"
 
     def change_state(self, event):
         evdev_code = ecodes.KEY[event.code]
