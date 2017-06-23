@@ -64,19 +64,19 @@ class Mouse():
         print event.code
         if event.code == ecodes.BTN_LEFT:
             print "Left Mouse Button Pressed"
-            self.state[2][0] = 1
+            self.state[2][0] = event.value
             self.state[2][1] = 0
             self.state[2][2] = 0
         elif event.code == ecodes.BTN_RIGHT:
             print "Right Mouse Button Pressed"
             self.state[2][0] = 0
-            self.state[2][1] = 1
+            self.state[2][1] = event.value
             self.state[2][2] = 0
         elif event.code == ecodes.BTN_MIDDLE:
             print "Middle Mouse Button Pressed"
             self.state[2][0] = 0
             self.state[2][1] = 0
-            self.state[2][2] = 1
+            self.state[2][2] = event.value
 
     def change_state_movement(self, event):
         print event
