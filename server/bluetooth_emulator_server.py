@@ -236,4 +236,4 @@ if __name__ == "__main__":
         myservice = BluetoothService()
         gtk.main()
     except KeyboardInterrupt:
-
+        myservice.close()
