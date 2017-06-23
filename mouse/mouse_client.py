@@ -51,6 +51,7 @@ class Mouse():
             try:
                 # try and get a mouse - should always be event1 as
                 # we're only plugging one thing in
+                for fn in 
                 self.dev = InputDevice("/dev/input/event1")
                 have_dev = True
             except OSError:
@@ -61,6 +62,10 @@ class Mouse():
     def change_state_button(self, event):
         evdev_code = ecodes.KEY[event.code]
         print evdev_code
+        if evdev_code == ecodes.BTN_LEFT:
+            print "Left Mouse Button Pressed"
+        elif evdev_code == ecodes.BTN_RIGHT:
+            print "Right Mouse Button Pressed"
 
     def change_state_movement(self, event):
         print event
@@ -83,4 +88,4 @@ class Mouse():
         for bit in element:
             bin_str += str(bit)
 
-        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
+        self.iface.send_mouse(int(bin_str, 2), self.state[3], self.state[4])
