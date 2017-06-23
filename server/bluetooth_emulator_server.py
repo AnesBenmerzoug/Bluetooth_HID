@@ -206,7 +206,7 @@ class BluetoothService(dbus.service.Object):
 
         self.device.send_string(cmd_str)
 
-    @dbus.service.method('org.upwork.HidBluetooth', in_signature='yay')
+    @dbus.service.method('org.upwork.HidBluetooth', in_signature='iai')
     def send_mouse(self, buttons, rel_mov):
 
         print("Received Mouse Input, sending it via Bluetooth")
