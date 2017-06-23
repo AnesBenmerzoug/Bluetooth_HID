@@ -79,7 +79,7 @@ class Mouse():
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state_button(event)
                 self.send_input()
-            elif event.type == ecodes.EV_REL[0] or event.type == ecodes.EV_REL[1]:
+            elif event.type == ecodes.EV_REL:
                 self.change_state_movement(event)
                 self.send_input()
 
