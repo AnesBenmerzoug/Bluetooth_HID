@@ -92,3 +92,11 @@ class Mouse():
             bin_str += str(bit)
 
         self.iface.send_mouse(int(bin_str, 2), self.state[3], self.state[4])
+
+if __name__ == "__main__":
+
+    print "Setting up mouse"
+    mouse = Mouse()
+
+    print "starting event loop"
+    mouse.event_loop()
