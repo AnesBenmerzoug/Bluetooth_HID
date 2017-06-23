@@ -25,7 +25,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 #
 # define a bluez 5 profile object for our keyboard
 #
-class BluetoothKbBluezProfile(dbus.service.Object):
+class BluetoothBluezProfile(dbus.service.Object):
     fd = -1
 
     @dbus.service.method("org.bluez.Profile1",
@@ -116,7 +116,7 @@ class BluetoothDevice():
         bus = dbus.SystemBus()
         manager = dbus.Interface(bus.get_object("org.bluez", "/org/bluez"), "org.bluez.ProfileManager1")
 
-        profile = BluetoothKbBluezProfile(bus, BluetoothDevice.PROFILE_DBUS_PATH)
+        profile = BluetoothBluezProfile(bus, BluetoothDevice.PROFILE_DBUS_PATH)
 
         manager.RegisterProfile(BluetoothDevice.PROFILE_DBUS_PATH, BluetoothDevice.UUID, opts)
 
