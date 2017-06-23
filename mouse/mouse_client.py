@@ -83,10 +83,10 @@ class Mouse():
         print event
         if event.code == ecodes.REL_X:
             print "X Movement"
-            self.state[3] = int(str(event.value),2)
+            self.state[3] = int(str(event.value), 2)
         elif event.code == ecodes.REL_Y:
             print "Y Movement"
-            self.state[4] = int(str(event.value),2)
+            self.state[4] = int(str(event.value), 2)
 
     # poll for mouse events
     def event_loop(self):
@@ -110,7 +110,7 @@ class Mouse():
         for bit in element:
             bin_str += str(bit)
 
-        self.iface.send_mouse(int(bin_str, 2), self.state[3], self.state[4])
+        self.iface.send_mouse(int(bin_str, 2), self.state[3:5])
 
 
 if __name__ == "__main__":

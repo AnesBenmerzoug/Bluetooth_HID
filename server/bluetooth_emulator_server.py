@@ -22,7 +22,6 @@ from bluetooth import *
 import gtk
 from dbus.mainloop.glib import DBusGMainLoop
 
-
 #
 # define a bluez 5 profile object for our keyboard
 #
@@ -69,7 +68,7 @@ class BluetoothKbBluezProfile(dbus.service.Object):
 class BluetoothDevice():
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
-    MY_DEV_NAME = "Bluetooth Keyboard/Mouse"
+    MY_DEV_NAME = "Bluetooth_Keyboard/Mouse"
 
     # define some constants
     P_CTRL = 17  # Service port - must match port configured in SDP record
@@ -207,7 +206,7 @@ class BluetoothService(dbus.service.Object):
 
         self.device.send_string(cmd_str)
 
-    @dbus.service.method('org.upwork.HidBluetooth', in_signature='iii')
+    @dbus.service.method('org.upwork.HidBluetooth', in_signature='yay')
     def send_mouse(self, buttons, x, y):
 
         print("Received Mouse Input, sending it via Bluetooth")
