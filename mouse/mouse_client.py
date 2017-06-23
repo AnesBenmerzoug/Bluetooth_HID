@@ -110,8 +110,10 @@ class Mouse():
         for bit in element:
             bin_str += str(bit)
 
-        self.iface.send_mouse(int(bin_str, 2), self.state[3:5])
-
+        try:
+            self.iface.send_mouse(int(bin_str, 2), self.state[3:5])
+        except:
+            pass
 
 if __name__ == "__main__":
     print "Setting up mouse"
