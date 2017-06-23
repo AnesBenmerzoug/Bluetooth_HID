@@ -69,11 +69,11 @@ class BluetoothKbBluezProfile(dbus.service.Object):
 class BluetoothKbDevice():
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
-    MY_DEV_NAME = "Bluetooth_Keyboard_Mouse"
+    MY_DEV_NAME = "Bluetooth Keyboard/Mouse"
 
     # define some constants
     P_CTRL = 17  # Service port - must match port configured in SDP record
-    P_INTR = 19  # Service port - must match port configured in SDP record#Interrrupt port
+    P_INTR = 19  # Service port - must match port configured in SDP record #Interrrupt port
     PROFILE_DBUS_PATH = "/bluez/upwork/hidbt_profile"  # dbus path of  the bluez profile we will create
     SDP_RECORD_PATH = sys.path[0] + "/sdp_record.xml"  # file path of the sdp record to laod
     UUID = "00001124-0000-1000-8000-00805f9b34fb"
@@ -167,6 +167,10 @@ class BluetoothKbDevice():
         # print("Sending "+message)
         self.cinterrupt.send(message)
 
+    def close(self):
+        self.scontrol.close()
+        self.sinterrupt.close()
+
 
 # define a dbus service that emulates a bluetooth keyboard and mouse
 # this will enable different clients to connect to and use
@@ -218,12 +222,18 @@ class BluetoothService(dbus.service.Object):
 
         self.device.send_string(cmd_str)
 
+    def close(self):
+        self.device.close()
+
 # main routine
 if __name__ == "__main__":
     # we can only run as root
     if not os.geteuid() == 0:
         sys.exit("Only root can run this script")
 
-    DBusGMainLoop(set_as_default=True)
-    myservice = BluetoothService()
-    gtk.main()
+    try:
+        DBusGMainLoop(set_as_default=True)
+        myservice = BluetoothService()
+        gtk.main()
+    except KeyboardInterrupt:
+
