@@ -13,7 +13,8 @@ import time
 import evdev  # used to get input from the mouse
 from evdev import InputDevice, ecodes
 
-#define a client to listen to local mouse events
+
+# define a client to listen to local mouse events
 class Mouse():
     def __init__(self):
         # the structure for a bluetooth mouse input report (size is 10 bytes)
@@ -65,28 +66,27 @@ class Mouse():
         if event.code == ecodes.BTN_LEFT:
             print "Left Mouse Button Pressed"
             self.state[2][0] = event.value
-            self.state[2][1] = 0
-            self.state[2][2] = 0
+            self.state[2][1] = 0x00
+            self.state[2][2] = 0x00
         elif event.code == ecodes.BTN_RIGHT:
             print "Right Mouse Button Pressed"
-            self.state[2][0] = 0
+            self.state[2][0] = 0x00
             self.state[2][1] = event.value
-            self.state[2][2] = 0
+            self.state[2][2] = 0x00
         elif event.code == ecodes.BTN_MIDDLE:
             print "Middle Mouse Button Pressed"
-            self.state[2][0] = 0
-            self.state[2][1] = 0
+            self.state[2][0] = 0x00
+            self.state[2][1] = 0x00
             self.state[2][2] = event.value
 
     def change_state_movement(self, event):
         print event
         if event.code == ecodes.REL_X:
             print "X Movement"
-            self.state[3] = event.value
+            self.state[3] = int(str(event.value),2)
         elif event.code == ecodes.REL_Y:
             print "Y Movement"
-            self.state[4] = event.value
-
+            self.state[4] = int(str(event.value),2)
 
     # poll for mouse events
     def event_loop(self):
@@ -112,8 +112,8 @@ class Mouse():
 
         self.iface.send_mouse(int(bin_str, 2), self.state[3], self.state[4])
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     print "Setting up mouse"
     mouse = Mouse()
 
