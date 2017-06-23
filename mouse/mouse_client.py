@@ -30,8 +30,8 @@ class Mouse():
              0,  # Unused
              0,  # Unused
              0],  # Unused
-            0x00,  # X
-            0x00,  # Y
+            0x00,  # Rel X
+            0x00,  # Rel Y
             0x00,  # Unused
             0x00,  # Unused
             0x00,  # Unused
@@ -80,6 +80,13 @@ class Mouse():
 
     def change_state_movement(self, event):
         print event
+        if event.code == ecodes.REL_X:
+            print "X Movement"
+            self.state[3] = event.value
+        elif event.code == ecodes.REL_Y:
+            print "Y Movement"
+            self.state[4] = event.value
+
 
     # poll for mouse events
     def event_loop(self):
