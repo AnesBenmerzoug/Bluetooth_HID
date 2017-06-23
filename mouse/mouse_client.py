@@ -61,13 +61,12 @@ class Mouse():
         print "Mouse Found"
 
     def change_state_button(self, event):
-        evdev_code = ecodes.KEY[event.code]
-        print evdev_code
-        if evdev_code == ecodes.BTN_LEFT:
+        print event.code
+        if event.code == ecodes.BTN_LEFT:
             print "Left Mouse Button Pressed"
-        elif evdev_code == ecodes.BTN_RIGHT:
+        elif event.code == ecodes.BTN_RIGHT:
             print "Right Mouse Button Pressed"
-        elif evdev_code == ecodes.BTN_MIDDLE:
+        elif event.code == ecodes.BTN_MIDDLE:
             print "Middle Mouse Button Pressed"
 
     def change_state_movement(self, event):
@@ -75,13 +74,17 @@ class Mouse():
 
     # poll for mouse events
     def event_loop(self):
+        print "event loop"
         for event in self.dev.read_loop():
+            print "inside event loop"
+            print event
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state_button(event)
                 self.send_input()
             elif event.type == ecodes.EV_REL:
                 self.change_state_movement(event)
                 self.send_input()
+        print "going out of the event loop"
 
     # forward mouse events to the dbus service
     def send_input(self):
