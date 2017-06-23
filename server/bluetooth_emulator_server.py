@@ -66,7 +66,7 @@ class BluetoothKbBluezProfile(dbus.service.Object):
 # create a bluetooth device to emulate a HID keyboard,
 # advertize a SDP record using our bluez profile class
 #
-class BluetoothKbDevice():
+class BluetoothDevice():
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
     MY_DEV_NAME = "Bluetooth Keyboard/Mouse"
@@ -88,12 +88,12 @@ class BluetoothKbDevice():
     # configure the bluetooth hardware device
     def init_bt_device(self):
 
-        print("Configuring for name " + BluetoothKbDevice.MY_DEV_NAME)
+        print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
         #os.system("hciconfig hcio class 0x002540")
         os.system("hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
-        os.system("hciconfig hcio name " + BluetoothKbDevice.MY_DEV_NAME)
+        os.system("hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
         # make the device discoverable
         os.system("hciconfig hcio piscan")
@@ -117,9 +117,9 @@ class BluetoothKbDevice():
         bus = dbus.SystemBus()
         manager = dbus.Interface(bus.get_object("org.bluez", "/org/bluez"), "org.bluez.ProfileManager1")
 
-        profile = BluetoothKbBluezProfile(bus, BluetoothKbDevice.PROFILE_DBUS_PATH)
+        profile = BluetoothKbBluezProfile(bus, BluetoothDevice.PROFILE_DBUS_PATH)
 
-        manager.RegisterProfile(BluetoothKbDevice.PROFILE_DBUS_PATH, BluetoothKbDevice.UUID, opts)
+        manager.RegisterProfile(BluetoothDevice.PROFILE_DBUS_PATH, BluetoothDevice.UUID, opts)
 
         print("Profile registered ")
 
@@ -129,7 +129,7 @@ class BluetoothKbDevice():
         print("Reading service record")
 
         try:
-            fh = open(BluetoothKbDevice.SDP_RECORD_PATH, "r")
+            fh = open(BluetoothDevice.SDP_RECORD_PATH, "r")
         except:
             sys.exit("Could not open the sdp record. Exiting...")
 
@@ -185,14 +185,14 @@ class BluetoothService(dbus.service.Object):
         dbus.service.Object.__init__(self, bus_name, "/org/upwork/hidbtservice")
 
         # create and setup our device
-        self.device = BluetoothKbDevice()
+        self.device = BluetoothDevice()
 
         # start listening for connections
         self.device.listen()
 
     @dbus.service.method('org.upwork.HidBluetooth', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
-
+        print("Received Keyboard Input, sending it via Bluetooth")
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x01)
@@ -210,6 +210,7 @@ class BluetoothService(dbus.service.Object):
     @dbus.service.method('org.upwork.HidBluetooth', in_signature='yyy')
     def send_mouse(self, buttons, x, y):
 
+        print("Received Mouse Input, sending it via Bluetooth")
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x02)
