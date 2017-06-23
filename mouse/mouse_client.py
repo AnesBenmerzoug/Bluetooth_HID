@@ -82,10 +82,10 @@ class Mouse():
         print event
         if event.code == ecodes.REL_X:
             print "X Movement"
-            self.state[3] = event.value
+            self.state[3] = int(event.value, 16)
         elif event.code == ecodes.REL_Y:
             print "Y Movement"
-            self.state[4] = event.value
+            self.state[4] = int(event.value, 16)
 
 
     # poll for mouse events
