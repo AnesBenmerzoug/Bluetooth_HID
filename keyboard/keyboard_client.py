@@ -46,7 +46,7 @@ class Keyboard():
 
         self.bus = dbus.SystemBus()
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', '/org/upwork/HidBluetooth')
-        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth')
+        self.iface_keyboard = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth.keyboard')
 
         print "Waiting for keyboard"
 
@@ -105,7 +105,7 @@ class Keyboard():
         for bit in element:
             bin_str += str(bit)
 
-        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
+        self.iface_keyboard.send_keys(int(bin_str, 2), self.state[4:10])
 
 
 if __name__ == "__main__":

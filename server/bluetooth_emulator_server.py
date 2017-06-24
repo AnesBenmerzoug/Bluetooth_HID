@@ -91,8 +91,9 @@ class BluetoothDevice():
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
-        #os.system("hciconfig hcio class 0x002540")
-        os.system("hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
+        #os.system("hciconfig hcio class 0x002540") # Keyboard
+        #os.system("hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
+        os.system("hciconfig hcio class 0x002580")  # Mouse
         os.system("hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
         # make the device discoverable
@@ -190,7 +191,7 @@ class BluetoothService(dbus.service.Object):
         # start listening for connections
         self.device.listen()
 
-    @dbus.service.method('org.upwork.HidBluetooth', in_signature='yay')
+    @dbus.service.method('org.upwork.HidBluetooth.keyboard', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
         print("Received Keyboard Input, sending it via Bluetooth")
         cmd_str = ""
@@ -207,7 +208,7 @@ class BluetoothService(dbus.service.Object):
 
         self.device.send_string(cmd_str)
 
-    @dbus.service.method('org.upwork.HidBluetooth', in_signature='iai')
+    @dbus.service.method('org.upwork.HidBluetooth.mouse', in_signature='iai')
     def send_mouse(self, buttons, rel_move):
 
         print("Received Mouse Input, sending it via Bluetooth")

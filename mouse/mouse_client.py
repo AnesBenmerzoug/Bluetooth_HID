@@ -42,7 +42,7 @@ class Mouse():
 
         self.bus = dbus.SystemBus()
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', '/org/upwork/HidBluetooth')
-        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth')
+        self.iface_mouse = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth.mouse')
 
         print "Waiting for mouse"
 
@@ -111,7 +111,7 @@ class Mouse():
             bin_str += str(bit)
 
         try:
-            self.iface.send_mouse(int(bin_str, 2), self.state[3:5])
+            self.iface_mouse.send_mouse(int(bin_str, 2), self.state[3:5])
         except:
             pass
 
