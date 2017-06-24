@@ -45,7 +45,7 @@ class Keyboard():
         print "Setting up DBus Client"
 
         self.bus = dbus.SystemBus()
-        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', '/org/upwork/HidBluetooth')
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', "/org/upwork/hidbtservice")
         self.iface_keyboard = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth.keyboard')
 
         print "Waiting for keyboard"

@@ -41,7 +41,7 @@ class Mouse():
         print "Setting up DBus Client"
 
         self.bus = dbus.SystemBus()
-        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', '/org/upwork/HidBluetooth')
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', "/org/upwork/hidbtservice")
         self.iface_mouse = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth.mouse')
 
         print "Waiting for mouse"
