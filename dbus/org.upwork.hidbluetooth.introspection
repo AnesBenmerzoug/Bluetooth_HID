@@ -10,4 +10,5 @@
               <arg name="buttons" type="i" direction="in"/>
               <arg name="rel_move" type="ai" direction="in"/>
             </method>
+          </interface>
        </node>
