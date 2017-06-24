@@ -225,7 +225,7 @@ class BluetoothService(dbus.service.Object):
 
     @dbus.service.method('org.freedesktop.DBus.Introspectable', out_signature='s')
     def Introspect(self):
-        return ET.tostring(ET.parse('/home/pi/Bluetooth_HID_Keyboard/Bluetooth_HID/dbus/org.upwork.hidbluetooth.introspection'), encoding='utf8', method='xml')
+        return ET.tostring(ET.parse('/home/pi/Bluetooth_HID_Keyboard/Bluetooth_HID/dbus/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8', method='xml')
 
     def close(self):
         self.device.close()
