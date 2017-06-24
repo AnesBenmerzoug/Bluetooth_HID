@@ -18,6 +18,7 @@ import dbus.mainloop.glib
 import time
 import bluetooth
 from bluetooth import *
+import xml.etree.ElementTree as ET
 
 import gtk
 from dbus.mainloop.glib import DBusGMainLoop
@@ -207,20 +208,24 @@ class BluetoothService(dbus.service.Object):
         self.device.send_string(cmd_str)
 
     @dbus.service.method('org.upwork.HidBluetooth', in_signature='iai')
-    def send_mouse(self, buttons, rel_mov):
+    def send_mouse(self, buttons, rel_move):
 
         print("Received Mouse Input, sending it via Bluetooth")
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x02)
         cmd_str += chr(buttons)
-        cmd_str += chr(rel_mov[0])
-        cmd_str += chr(rel_mov[1])
+        cmd_str += chr(rel_move[0])
+        cmd_str += chr(rel_move[1])
         cmd_str += chr(0x00)
         cmd_str += chr(0x00)
         cmd_str += chr(0x00)
 
         self.device.send_string(cmd_str)
+
+    @dbus.service.method('org.freedesktop.DBus.Introspectable', out_signature='s')
+    def Introspect(self):
+        return ET.tostring(ET.parse('../dbus/org.upwork.hidbluetooth.introspection'), encoding='utf8', method='xml')
 
     def close(self):
         self.device.close()
