@@ -84,16 +84,23 @@ class BluetoothDevice():
     # configure the bluetooth hardware device
     def init_bt_device(self):
 
+        print("Starting Bluetooth Initilization")
+
+        os.system("sudo /etc/init.d/bluetooth stop &>/dev/null &") # Stopping bluetooth daemon
+        os.system("sudo /usr/sbin/bluetoothd --nodetach --debug -p time &>/dev/null &") # Starting bluetooth daemon without plugins
+
+        os.system("sudo hciconfig hci0 up") # Turning on bluetooth device
+
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
         #os.system("hciconfig hcio class 0x002540") # Keyboard
-        #os.system("hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
-        os.system("hciconfig hcio class 0x002580")  # Mouse
-        os.system("hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
+        # os.system("hciconfig hcio class 0x002580")  # Mouse
+        os.system("sudo hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
+        os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
         # make the device discoverable
-        os.system("hciconfig hcio piscan")
+        os.system("sudo hciconfig hcio piscan")
 
     # set up a bluez profile to advertise device capabilities from a loaded service record
     def init_bluez_profile(self):
