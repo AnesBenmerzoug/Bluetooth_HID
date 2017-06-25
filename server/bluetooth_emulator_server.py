@@ -84,13 +84,6 @@ class BluetoothDevice():
     # configure the bluetooth hardware device
     def init_bt_device(self):
 
-        print("Starting Bluetooth Initilization")
-
-        os.system("sudo /etc/init.d/bluetooth stop &>/dev/null &") # Stopping bluetooth daemon
-        os.system("sudo /usr/sbin/bluetoothd --nodetach --debug -p time &>/dev/null &") # Starting bluetooth daemon without plugins
-
-        os.system("sudo hciconfig hci0 up") # Turning on bluetooth device
-
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
