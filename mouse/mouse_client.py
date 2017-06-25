@@ -4,8 +4,6 @@
 #
 #
 
-import os  # used to call external commands
-import sys  # used to exit the script
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -26,7 +24,7 @@ class Mouse():
             [0,  # Button 1
              0,  # Button 2
              0,  # Button 3
-             0,  # Button 4
+             1,  # Button 4
              0,  # Button 5
              0,  # Unused
              0,  # Unused
@@ -41,8 +39,8 @@ class Mouse():
         print "Setting up DBus Client"
 
         self.bus = dbus.SystemBus()
-        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', "/org/upwork/hidbtservice")
-        self.iface_mouse = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth.mouse')
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
+        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
 
         print "Waiting for mouse"
 
@@ -61,6 +59,7 @@ class Mouse():
                 time.sleep(3)
         print "Mouse Found"
 
+    # take care of mouse buttons
     def change_state_button(self, event):
         print event.code
         if event.code == ecodes.BTN_LEFT:
@@ -79,14 +78,23 @@ class Mouse():
             self.state[2][1] = 0x00
             self.state[2][2] = event.value
 
+    # take care of mouse movements
     def change_state_movement(self, event):
         print event
         if event.code == ecodes.REL_X:
             print "X Movement"
-            self.state[3] = int(str(event.value))
+            self.state[3] = min(abs(event.value), 127)
+            self.state[2][4] = 0 if event.value > 0 else 1 # sign of the value
         elif event.code == ecodes.REL_Y:
             print "Y Movement"
-            self.state[4] = int(str(event.value))
+            self.state[4] = min(abs(event.value), 127)
+            self.state[2][5] = 0 if event.value > 0 else 1 # sign of the value
+        else:
+            self.state[2][4] = 0
+            self.state[2][5] = 0
+            self.state[3] = 0
+            self.state[4] = 0
+
 
     # poll for mouse events
     def event_loop(self):
@@ -111,7 +119,7 @@ class Mouse():
             bin_str += str(bit)
 
         try:
-            self.iface_mouse.send_mouse(int(bin_str, 2), self.state[3:5])
+            self.iface.send_mouse(int(bin_str, 2), self.state[3:5])
         except:
             pass
 

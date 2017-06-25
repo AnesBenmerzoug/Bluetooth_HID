@@ -8,15 +8,11 @@
 
 from __future__ import absolute_import, print_function
 
-from optparse import OptionParser, make_option
 import os
 import sys
-import uuid
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-import time
-import bluetooth
 from bluetooth import *
 import xml.etree.ElementTree as ET
 
@@ -74,7 +70,7 @@ class BluetoothDevice():
     # define some constants
     P_CTRL = 17  # Service port - must match port configured in SDP record
     P_INTR = 19  # Service port - must match port configured in SDP record #Interrrupt port
-    PROFILE_DBUS_PATH = "/bluez/upwork/hidbt_profile"  # dbus path of  the bluez profile we will create
+    PROFILE_DBUS_PATH = "/bluez/upwork/hidbluetooth_profile"  # dbus path of  the bluez profile we will create
     SDP_RECORD_PATH = sys.path[0] + "/sdp_record.xml"  # file path of the sdp record to laod
     UUID = "00001124-0000-1000-8000-00805f9b34fb"
 
@@ -182,8 +178,8 @@ class BluetoothService(dbus.service.Object):
         print("Setting up service")
 
         # set up as a dbus service
-        bus_name = dbus.service.BusName("org.upwork.HidBluetooth", bus=dbus.SystemBus())
-        dbus.service.Object.__init__(self, bus_name, "/org/upwork/hidbtservice")
+        bus_name = dbus.service.BusName("org.upwork.HidBluetoothService", bus=dbus.SystemBus())
+        dbus.service.Object.__init__(self, bus_name, "/org/upwork/HidBluetoothService")
 
         # create and setup our device
         self.device = BluetoothDevice()
@@ -191,7 +187,7 @@ class BluetoothService(dbus.service.Object):
         # start listening for connections
         self.device.listen()
 
-    @dbus.service.method('org.upwork.HidBluetooth.keyboard', in_signature='yay')
+    @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
         print("Received Keyboard Input, sending it via Bluetooth")
         cmd_str = ""
@@ -208,7 +204,7 @@ class BluetoothService(dbus.service.Object):
 
         self.device.send_string(cmd_str)
 
-    @dbus.service.method('org.upwork.HidBluetooth.mouse', in_signature='iai')
+    @dbus.service.method('org.upwork.HidBluetoothService', in_signature='iai')
     def send_mouse(self, buttons, rel_move):
 
         print("Received Mouse Input, sending it via Bluetooth")

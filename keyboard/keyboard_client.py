@@ -6,8 +6,6 @@
 #		   and http://yetanotherpointlesstechblog.blogspot.de/2016/04/emulating-bluetooth-keyboard-with.html
 #
 
-import os  # used to call external commands
-import sys  # used to exit the script
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -45,8 +43,8 @@ class Keyboard():
         print "Setting up DBus Client"
 
         self.bus = dbus.SystemBus()
-        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetooth', "/org/upwork/hidbtservice")
-        self.iface_keyboard = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetooth.keyboard')
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
+        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
 
         print "Waiting for keyboard"
 
@@ -105,7 +103,7 @@ class Keyboard():
         for bit in element:
             bin_str += str(bit)
 
-        self.iface_keyboard.send_keys(int(bin_str, 2), self.state[4:10])
+        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
 
 
 if __name__ == "__main__":
