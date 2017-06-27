@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Bluetooth Initilization"
+printf "\nBluetooth Initilization\n\n"
 
 cmd1="sudo /etc/init.d/bluetooth stop"
 
