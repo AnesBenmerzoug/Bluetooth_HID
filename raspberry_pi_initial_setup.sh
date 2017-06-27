@@ -16,7 +16,7 @@ sudo apt-get install python-gobject pi-bluetooth bluez bluez-tools bluez-firmwar
 
 echo "Installing evdev for reading and writing input events from the keyboard and mouse"
 
-sudo pip install evdev -y
+sudo pip install evdev
 
 # DBUS Configuration
 sudo cp org.upwork.hidbluetooth.conf /etc/dbus-1/system.d
