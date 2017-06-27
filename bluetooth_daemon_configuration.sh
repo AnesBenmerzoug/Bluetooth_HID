@@ -1,7 +1,5 @@
 #!/bin/bash
 
-printf "\nBluetooth Initilization\n\n"
-
 cmd1="sudo /etc/init.d/bluetooth stop"
 
 cmd2="sudo /usr/sbin/bluetoothd --nodetach --debug -p time"
