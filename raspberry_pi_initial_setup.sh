@@ -6,7 +6,7 @@ printf "\nUpdating and upgrading the Raspberry Pi\n\n"
 
 sudo apt-get update -y
 sudo apt-get updgrade -y
-sudo apt-get dist-upgrade -y
+sudo apt-get dist-upgrade
 
 # Install necessary packages
 
