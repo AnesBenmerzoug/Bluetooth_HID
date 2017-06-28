@@ -87,9 +87,7 @@ class BluetoothDevice():
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
-        #os.system("hciconfig hcio class 0x002540") # Keyboard
-        # os.system("hciconfig hcio class 0x002580")  # Mouse
-        os.system("sudo hciconfig hcio class 0x0025C0") # Keyboard/Mouse Combo
+        os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo
         os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
         # make the device discoverable
@@ -214,7 +212,7 @@ class BluetoothService(dbus.service.Object):
         cmd_str += chr(buttons)
         cmd_str += chr(rel_move[0])
         cmd_str += chr(rel_move[1])
-        cmd_str += chr(0x00)
+        cmd_str += chr(rel_move[2])
         cmd_str += chr(0x00)
         cmd_str += chr(0x00)
 

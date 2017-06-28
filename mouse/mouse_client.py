@@ -15,7 +15,7 @@ from evdev import InputDevice, ecodes
 # define a client to listen to local mouse events
 class Mouse():
     def __init__(self):
-        # the structure for a bluetooth mouse input report (size is 10 bytes)
+        # the structure for a bluetooth mouse input report (size is 6 bytes)
 
         self.state = [
             0xA1,  # this is an input report
@@ -31,9 +31,7 @@ class Mouse():
              0],  # Unused
             0x00,  # Rel X
             0x00,  # Rel Y
-            0x00,  # Unused
-            0x00,  # Unused
-            0x00,  # Unused
+            0x00,  # Mouse Wheel
         ]
 
         print "Setting up DBus Client"
@@ -84,23 +82,26 @@ class Mouse():
         if event.code == ecodes.REL_X:
             print "X Movement"
             self.state[3] = min(abs(event.value), 127)
-            self.state[2][4] = 0 if event.value > 0 else 1 # sign of the value
+            self.state[2][4] = 0 if event.value >= 0 else 1 # sign of the value
         elif event.code == ecodes.REL_Y:
             print "Y Movement"
             self.state[4] = min(abs(event.value), 127)
-            self.state[2][5] = 0 if event.value > 0 else 1 # sign of the value
+            self.state[2][5] = 0 if event.value >= 0 else 1 # sign of the value
+        elif event.code == ecodes.REL_WHEEL:
+            print "Wheel Movement"
+            self.state[5] = 1 if event.value > 0 else 31 if event.value < 0 else 0
         else:
             self.state[2][4] = 0
             self.state[2][5] = 0
             self.state[3] = 0
             self.state[4] = 0
+            self.state[5] = 0
 
 
     # poll for mouse events
     def event_loop(self):
         print "event loop"
         for event in self.dev.read_loop():
-            print "inside event loop"
             print event
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state_button(event)
@@ -108,7 +109,6 @@ class Mouse():
             elif event.type == ecodes.EV_REL:
                 self.change_state_movement(event)
                 self.send_input()
-        print "going out of the event loop"
 
     # forward mouse events to the dbus service
     def send_input(self):
@@ -119,7 +119,7 @@ class Mouse():
             bin_str += str(bit)
 
         try:
-            self.iface.send_mouse(int(bin_str, 2), self.state[3:5])
+            self.iface.send_mouse(int(bin_str, 2), self.state[3:6])
         except:
             pass
 
