@@ -6,8 +6,6 @@
 #		   and http://yetanotherpointlesstechblog.blogspot.de/2016/04/emulating-bluetooth-keyboard-with.html
 #
 
-from __future__ import absolute_import, print_function
-
 import os
 import sys
 import dbus
