@@ -10,4 +10,10 @@ $cmd1 &>/dev/null &
 
 $cmd2 &>/dev/null &
 
+sleep 1
+
+$cmd3 &>/dev/null &
+
+sleep 1
+
 $cmd3 &>/dev/null &
