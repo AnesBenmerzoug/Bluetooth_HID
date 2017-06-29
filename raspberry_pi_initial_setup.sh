@@ -1,5 +1,7 @@
 #!/bin/bash
 
+printf "\nStarting The Raspberry Pi Initial Setup.\n\n"
+
 # Update and upgrade raspberry pi
 
 printf "\nUpdating and upgrading the Raspberry Pi\n\n"
@@ -20,3 +22,7 @@ sudo pip install evdev
 
 # DBUS Configuration
 sudo cp org.upwork.hidbluetooth.conf /etc/dbus-1/system.d
+
+sudo service dbus restart
+
+printf "\nFinished The Raspberry Pi Initial Setup.\n\n"

@@ -85,7 +85,8 @@ class BluetoothDevice():
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord and set the name
-        os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo
+        #os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
+        os.system("sudo hciconfig hcio class 0x05C0")  # Keyboard/Mouse Combo in General Discoverable Mode
         os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
         # make the device discoverable
