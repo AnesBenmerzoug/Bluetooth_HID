@@ -81,13 +81,11 @@ class PageTwo(Frame):
         self.buttons = []
 
         for i in xrange(9):
-            self.buttons.append(Button(self.container, text=str(i+1)))
-            self.buttons[i].bind("<Button-1>", self.button_press)
+            self.buttons.append(Button(self.container, text=str(i+1), command=lambda row=i/3, column=i%3: self.button_press(row, column)))
             self.buttons[i].grid(row=i/3, column=i%3, padx=20, pady=20)
 
-
-    def button_press(self, event):
-        print event
+    def button_press(self, row, column):
+        print row*3+column+1
 
 
 if __name__ == "__main__":
