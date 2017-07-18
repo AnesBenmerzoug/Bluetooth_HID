@@ -7,6 +7,12 @@ import dbus.mainloop.glib
 from bluetooth import *
 import xml.etree.ElementTree as ET
 
+import gtk
+import gobject
+from dbus.mainloop.glib import DBusGMainLoop
+
+from threading import Thread
+
 #####################################################################################################
 
 #
@@ -51,7 +57,7 @@ class BluetoothBluezProfile(dbus.service.Object):
 # create a bluetooth device to emulate a HID keyboard/mouse,
 # advertize a SDP record using our bluez profile class
 #
-class BluetoothDevice():
+class BluetoothDevice(Thread):
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
     MY_DEV_NAME = "Bluetooth_Keyboard/Mouse"
@@ -65,6 +71,7 @@ class BluetoothDevice():
 
     def __init__(self):
 
+	Thread.__init__(self)
         self.init_bt_device()
         self.init_bluez_profile()
 
@@ -111,7 +118,9 @@ class BluetoothDevice():
 
         return fh.read()
 
-
+    def run(self):
+	print "starting thread"
+	self.listen()
 
     # listen for incoming client connections
 
@@ -131,10 +140,10 @@ class BluetoothDevice():
         self.sinterrupt.listen(1)
 
         self.ccontrol, cinfo = self.scontrol.accept()
-        #print("Got a connection on the control channel from " + cinfo[0])
+        print("Got a connection on the control channel from " + cinfo[0])
 
         self.cinterrupt, cinfo = self.sinterrupt.accept()
-        #print("Got a connection on the interrupt channel from " + cinfo[0])
+        print("Got a connection on the interrupt channel from " + cinfo[0])
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
@@ -159,7 +168,7 @@ class BluetoothService(dbus.service.Object):
         self.device = BluetoothDevice()
 
         # start listening for connections
-        self.device.listen()
+        #self.device.listen()
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
@@ -241,7 +250,6 @@ class App(Frame):
 
         DBusGMainLoop(set_as_default=True)
         self.myservice = BluetoothService()
-        gtk.main()
 
     def change_screen(self):
         index = self.buttons_variable.get()
@@ -292,9 +300,19 @@ class PageTwo(Frame):
     def button_press(self, row, column):
         print row*3+column+1
 
+def interface_update(app):
+	try:
+		app.update_idletasks()
+		app.update()
+		return True
+	except:
+		gtk.main_quit()
+		return False
 
 if __name__ == "__main__":
     root = Tk()
     root.minsize(300, 400)
     root.maxsize(300, 400)
-    App(root).mainloop()
+    app = App(root)
+    gobject.timeout_add(10, lambda: interface_update(app))
+    gtk.main()
