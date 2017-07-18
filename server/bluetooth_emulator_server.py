@@ -18,7 +18,7 @@ import gtk
 from dbus.mainloop.glib import DBusGMainLoop
 
 #
-# define a bluez 5 profile object for our keyboard
+# define a bluez 5 profile object for our keyboard/mouse
 #
 class BluetoothBluezProfile(dbus.service.Object):
     fd = -1
@@ -57,7 +57,7 @@ class BluetoothBluezProfile(dbus.service.Object):
 
 
 #
-# create a bluetooth device to emulate a HID keyboard,
+# create a bluetooth device to emulate a HID keyboard/mouse,
 # advertize a SDP record using our bluez profile class
 #
 class BluetoothDevice():
@@ -84,7 +84,7 @@ class BluetoothDevice():
 
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
-        # set the device class to a keybord and set the name
+        # set the device class to a keybord/mouse combo and set the name
         #os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
         os.system("sudo hciconfig hcio class 0x05C0")  # Keyboard/Mouse Combo in General Discoverable Mode
         os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
