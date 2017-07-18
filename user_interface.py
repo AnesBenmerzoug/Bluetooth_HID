@@ -13,6 +13,207 @@ from dbus.mainloop.glib import DBusGMainLoop
 
 from threading import Thread
 
+import time
+import evdev  # used to get input from the keyboard
+from evdev import InputDevice, ecodes
+import keymap  # used to map evdev input to hide key codes
+
+#####################################################################################################
+
+# define a client to listen to local mouse events
+class Mouse():
+    def __init__(self):
+        # the structure for a bluetooth mouse input report (size is 6 bytes)
+
+        self.state = [
+            0xA1,  # this is an input report
+            0x02,  # Usage report = Mouse
+            # Bit array for Button
+            [0,  # Button 1
+             0,  # Button 2
+             0,  # Button 3
+             1,  # Button 4
+             0,  # Button 5
+             0,  # Unused
+             0,  # Unused
+             0],  # Unused
+            0x00,  # Rel X
+            0x00,  # Rel Y
+            0x00,  # Mouse Wheel
+        ]
+
+        self.bus = dbus.SystemBus()
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
+        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
+
+        # keep trying to find a mouse
+        have_dev = False
+        while have_dev == False:
+            try:
+                # try and get a mouse - loop through all devices and try to find a mouse
+                devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+                for device in devices:
+                    if "mouse" in device.name.lower():
+                        self.dev = InputDevice(device.fn)
+                        have_dev = True
+            except OSError:
+                print "Mouse not found, waiting 3 seconds and retrying"
+                time.sleep(3)
+        print "Mouse Found"
+
+    # take care of mouse buttons
+    def change_state_button(self, event):
+        print event.code
+        if event.code == ecodes.BTN_LEFT:
+            print "Left Mouse Button Pressed"
+            self.state[2][0] = event.value
+            self.state[2][1] = 0x00
+            self.state[2][2] = 0x00
+        elif event.code == ecodes.BTN_RIGHT:
+            print "Right Mouse Button Pressed"
+            self.state[2][0] = 0x00
+            self.state[2][1] = event.value
+            self.state[2][2] = 0x00
+        elif event.code == ecodes.BTN_MIDDLE:
+            print "Middle Mouse Button Pressed"
+            self.state[2][0] = 0x00
+            self.state[2][1] = 0x00
+            self.state[2][2] = event.value
+
+    # take care of mouse movements
+    def change_state_movement(self, event):
+        print event
+        if event.code == ecodes.REL_X:
+            print "X Movement"
+            self.state[3] = min(abs(event.value), 127)
+            self.state[2][4] = 0 if event.value >= 0 else 1 # sign of the value
+        elif event.code == ecodes.REL_Y:
+            print "Y Movement"
+            self.state[4] = min(abs(event.value), 127)
+            self.state[2][5] = 0 if event.value >= 0 else 1 # sign of the value
+        elif event.code == ecodes.REL_WHEEL:
+            print "Wheel Movement"
+            self.state[5] = 1 if event.value > 0 else 31 if event.value < 0 else 0
+        else:
+            self.state[2][4] = 0
+            self.state[2][5] = 0
+            self.state[3] = 0
+            self.state[4] = 0
+            self.state[5] = 0
+
+
+    # poll for mouse events
+    def event_loop(self):
+        for event in self.dev.read_loop():
+            print event
+            if event.type == ecodes.EV_KEY and event.value < 2:
+                self.change_state_button(event)
+                self.send_input()
+            elif event.type == ecodes.EV_REL:
+                self.change_state_movement(event)
+                self.send_input()
+
+    # forward mouse events to the dbus service
+    def send_input(self):
+
+        bin_str = ""
+        element = self.state[2]
+        for bit in element:
+            bin_str += str(bit)
+
+        try:
+            self.iface.send_mouse(int(bin_str, 2), self.state[3:6])
+        except:
+            pass
+
+#####################################################################################################
+
+# Define a client to listen to local key events
+class Keyboard():
+    def __init__(self):
+        # the structure for a bluetooth keyboard input report (size is 10 bytes)
+
+        self.state = [
+            0xA1,  # this is an input report
+            0x01,  # Usage report = Keyboard
+            # Bit array for Modifier keys
+            [0,  # Right GUI - Windows Key
+             0,  # Right ALT
+             0,  # Right Shift
+             0,  # Right Control
+             0,  # Left GUI
+             0,  # Left ALT
+             0,  # Left Shift
+             0],  # Left Control
+            0x00,  # Vendor reserved
+            0x00,  # rest is space for 6 keys
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00]
+
+        self.bus = dbus.SystemBus()
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
+        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
+
+        # keep trying to key a keyboard
+        have_dev = False
+        while have_dev == False:
+            try:
+                # try and get a keyboard - loop through all devices and try to find a keyboard
+                devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
+                for device in devices:
+                    if "keyboard" in device.name.lower():
+                        self.dev = InputDevice(device.fn)
+                        have_dev = True
+            except OSError:
+                print "Keyboard not found, waiting 3 seconds and retrying"
+                time.sleep(3)
+        print "Keyboard Found"
+
+    def change_state(self, event):
+        evdev_code = ecodes.KEY[event.code]
+        modkey_element = keymap.modkey(evdev_code)
+
+        if modkey_element > 0:
+            if self.state[2][modkey_element] == 0:
+                self.state[2][modkey_element] = 1
+            else:
+                self.state[2][modkey_element] = 0
+
+        else:
+
+            # Get the keycode of the key
+            hex_key = keymap.convert(ecodes.KEY[event.code])
+            # Loop through elements 4 to 9 of the input report structure
+            for i in range(4, 10):
+                if self.state[i] == hex_key and event.value == 0:
+                    # Code 0 so we need to depress it
+                    self.state[i] = 0x00
+                elif self.state[i] == 0x00 and event.value == 1:
+                    # if the current space if empty and the key is being pressed
+                    self.state[i] = hex_key
+                    break
+
+    # poll for keyboard events
+    def event_loop(self):
+        for event in self.dev.read_loop():
+            # only bother if we hit a key and its an up or down event
+            if event.type == ecodes.EV_KEY and event.value < 2:
+                self.change_state(event)
+                self.send_input()
+
+    # forward keyboard events to the dbus service
+    def send_input(self):
+
+        bin_str = ""
+        element = self.state[2]
+        for bit in element:
+            bin_str += str(bit)
+
+        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
+
 #####################################################################################################
 
 #
@@ -53,6 +254,7 @@ class BluetoothBluezProfile(dbus.service.Object):
     def __init__(self, bus, path):
         dbus.service.Object.__init__(self, bus, path)
 
+
 #
 # create a bluetooth device to emulate a HID keyboard/mouse,
 # advertize a SDP record using our bluez profile class
@@ -71,7 +273,7 @@ class BluetoothDevice(Thread):
 
     def __init__(self):
 
-	Thread.__init__(self)
+        Thread.__init__(self)
         self.init_bt_device()
         self.init_bluez_profile()
 
@@ -79,7 +281,7 @@ class BluetoothDevice(Thread):
     def init_bt_device(self):
 
         # set the device class to a keybord/mouse combo and set the name
-        #os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
+        # os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
         os.system("sudo hciconfig hcio class 0x05C0")  # Keyboard/Mouse Combo in General Discoverable Mode
         os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
@@ -88,7 +290,6 @@ class BluetoothDevice(Thread):
 
     # set up a bluez profile to advertise device capabilities from a loaded service record
     def init_bluez_profile(self):
-
 
         # setup profile options
         service_record = self.read_sdp_service_record()
@@ -119,8 +320,8 @@ class BluetoothDevice(Thread):
         return fh.read()
 
     def run(self):
-	print "starting thread"
-	self.listen()
+        print "starting thread"
+        self.listen()
 
     # listen for incoming client connections
 
@@ -168,7 +369,7 @@ class BluetoothService(dbus.service.Object):
         self.device = BluetoothDevice()
 
         # start listening for connections
-        #self.device.listen()
+        # self.device.listen()
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
@@ -204,7 +405,8 @@ class BluetoothService(dbus.service.Object):
 
     @dbus.service.method('org.freedesktop.DBus.Introspectable', out_signature='s')
     def Introspect(self):
-        return ET.tostring(ET.parse(os.getcwd()+'/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8', method='xml')
+        return ET.tostring(ET.parse(os.getcwd() + '/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8',
+                           method='xml')
 
     def close(self):
         try:
@@ -212,12 +414,14 @@ class BluetoothService(dbus.service.Object):
         except:
             pass
 
+
 #####################################################################################################
 
 class App(Frame):
     """
     GUI Class
     """
+
     def __init__(self, master=None, width=200, height=400, background="white"):
         Frame.__init__(self, master, width=width, height=height, bg=background)
         self.pack(side="top", fill=BOTH, expand=True)
@@ -231,8 +435,9 @@ class App(Frame):
         self.radio_buttons = []
 
         for i in xrange(4):
-            self.radio_buttons.append(Radiobutton(self.buttons_frame, variable=self.buttons_variable, activebackground="green", bg="white",
-                                                  selectcolor="green", relief="sunken", command=self.change_screen, value=i, indicatoron=0))
+            self.radio_buttons.append(
+                Radiobutton(self.buttons_frame, variable=self.buttons_variable, activebackground="green", bg="white",
+                            selectcolor="green", relief="sunken", command=self.change_screen, value=i, indicatoron=0))
             self.radio_buttons[i].pack(fill=X, expand=True, side=LEFT, padx=10, pady=10)
 
         self.inner_frame = Frame(self, bg=background)
@@ -261,7 +466,6 @@ class App(Frame):
 
 
 class PageOne(Frame):
-
     def __init__(self, master, background="white"):
         Frame.__init__(self, master, bg=background)
 
@@ -273,18 +477,19 @@ class PageOne(Frame):
         self.frame1 = Frame(self, bg=background)
         self.frame1.pack(side="top", fill="both", expand=True)
 
-        Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10,20), pady=10)
-        Label(self.frame1, textvariable=self.bluetooth_status, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10, pady=10)
+        Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10, 20), pady=10)
+        Label(self.frame1, textvariable=self.bluetooth_status, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
+                                                                              pady=10)
 
         self.frame2 = Frame(self, bg=background)
         self.frame2.pack(side="top", fill="both", expand=True)
 
         Label(self.frame2, text="Connection Status: ", bg=background).pack(side=LEFT, padx=10, pady=10)
-        Label(self.frame2, textvariable=self.connection_status, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10, pady=10)
+        Label(self.frame2, textvariable=self.connection_status, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
+                                                                               pady=10)
 
 
 class PageTwo(Frame):
-
     def __init__(self, master, background="white"):
         Frame.__init__(self, master, bg=background)
 
@@ -294,25 +499,32 @@ class PageTwo(Frame):
         self.buttons = []
 
         for i in xrange(9):
-            self.buttons.append(Button(self.container, text=str(i+1), command=lambda row=i/3, column=i%3: self.button_press(row, column)))
-            self.buttons[i].grid(row=i/3, column=i%3, padx=20, pady=20)
+            self.buttons.append(Button(self.container, text=str(i + 1),
+                                       command=lambda row=i / 3, column=i % 3: self.button_press(row, column)))
+            self.buttons[i].grid(row=i / 3, column=i % 3, padx=20, pady=20)
 
     def button_press(self, row, column):
-        print row*3+column+1
+        print row * 3 + column + 1
 
-def interface_update(app):
-	try:
-		app.update_idletasks()
-		app.update()
-		return True
-	except:
-		gtk.main_quit()
-		return False
+
+def update(application, keyboard, mouse):
+    try:
+        application.update_idletasks()
+        application.update()
+        keyboard.event_loop()
+        mouse.event_loop()
+        return True
+    except:
+        gtk.main_quit()
+        return False
+
 
 if __name__ == "__main__":
     root = Tk()
     root.minsize(300, 400)
     root.maxsize(300, 400)
     app = App(root)
-    gobject.timeout_add(10, lambda: interface_update(app))
+    kb = Keyboard()
+    mouse = Mouse()
+    gobject.timeout_add(10, lambda: update(app, kb, mouse))
     gtk.main()
