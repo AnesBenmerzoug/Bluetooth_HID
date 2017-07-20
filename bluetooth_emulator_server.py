@@ -1,4 +1,11 @@
-from Tkinter import *
+#!/usr/bin/python
+#
+# Bluetooth keyboard emulator DBUS Service
+# 
+# Adapted from https://www.gadgetdaily.xyz/create-a-cool-sliding-and-scrollable-mobile-menu/
+#		   and http://yetanotherpointlesstechblog.blogspot.de/2016/04/emulating-bluetooth-keyboard-with.html
+#
+
 import os
 import sys
 import dbus
@@ -8,21 +15,7 @@ from bluetooth import *
 import xml.etree.ElementTree as ET
 
 import gtk
-import gobject
 from dbus.mainloop.glib import DBusGMainLoop
-
-from threading import Thread
-
-from keyboard.keyboard_client import Keyboard
-from mouse/mouse_client import Mouse
-
-#####################################################################################################
-
-bluetoothStatus = StringVar()
-
-connectionStatus = StringVar()
-
-#####################################################################################################
 
 #
 # define a bluez 5 profile object for our keyboard/mouse
@@ -67,7 +60,7 @@ class BluetoothBluezProfile(dbus.service.Object):
 # create a bluetooth device to emulate a HID keyboard/mouse,
 # advertize a SDP record using our bluez profile class
 #
-class BluetoothDevice(Thread):
+class BluetoothDevice():
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
     MY_DEV_NAME = "Bluetooth_Keyboard/Mouse"
@@ -81,15 +74,18 @@ class BluetoothDevice(Thread):
 
     def __init__(self):
 
-        Thread.__init__(self)
+        print("Setting up Bluetooth device")
+
         self.init_bt_device()
         self.init_bluez_profile()
 
     # configure the bluetooth hardware device
     def init_bt_device(self):
 
+        print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
+
         # set the device class to a keybord/mouse combo and set the name
-        # os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
+        #os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
         os.system("sudo hciconfig hcio class 0x05C0")  # Keyboard/Mouse Combo in General Discoverable Mode
         os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
@@ -98,6 +94,8 @@ class BluetoothDevice(Thread):
 
     # set up a bluez profile to advertise device capabilities from a loaded service record
     def init_bluez_profile(self):
+
+        print("Configuring Bluez Profile")
 
         # setup profile options
         service_record = self.read_sdp_service_record()
@@ -117,8 +115,12 @@ class BluetoothDevice(Thread):
 
         manager.RegisterProfile(BluetoothDevice.PROFILE_DBUS_PATH, BluetoothDevice.UUID, opts)
 
+        print("Profile registered ")
+
     # read and return an sdp record from a file
     def read_sdp_service_record(self):
+
+        print("Reading service record")
 
         try:
             fh = open(BluetoothDevice.SDP_RECORD_PATH, "r")
@@ -127,9 +129,7 @@ class BluetoothDevice(Thread):
 
         return fh.read()
 
-    def run(self):
-        print "starting thread"
-        self.listen()
+
 
     # listen for incoming client connections
 
@@ -137,6 +137,7 @@ class BluetoothDevice(Thread):
     # but that didn't seem to work
     def listen(self):
 
+        print("Waiting for connections")
         self.scontrol = BluetoothSocket(L2CAP)
         self.sinterrupt = BluetoothSocket(L2CAP)
 
@@ -154,20 +155,15 @@ class BluetoothDevice(Thread):
         self.cinterrupt, cinfo = self.sinterrupt.accept()
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
-        global connectionStatus
-
-        connectionStatus.set("Connected")
-
     # send a string to the bluetooth host machine
     def send_string(self, message):
+
+        # print("Sending "+message)
         self.cinterrupt.send(message)
 
     def close(self):
         self.scontrol.close()
         self.sinterrupt.close()
-
-        global connectionStatus
-        connectionStatus.set("Disconnected")
 
 
 # define a dbus service that emulates a bluetooth keyboard and mouse
@@ -175,6 +171,8 @@ class BluetoothDevice(Thread):
 # the service
 class BluetoothService(dbus.service.Object):
     def __init__(self):
+
+        print("Setting up service")
 
         # set up as a dbus service
         bus_name = dbus.service.BusName("org.upwork.HidBluetoothService", bus=dbus.SystemBus())
@@ -184,11 +182,11 @@ class BluetoothService(dbus.service.Object):
         self.device = BluetoothDevice()
 
         # start listening for connections
-        # self.device.listen()
+        self.device.listen()
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
-
+        print("Received Keyboard Input, sending it via Bluetooth")
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x01)
@@ -206,6 +204,7 @@ class BluetoothService(dbus.service.Object):
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='iai')
     def send_mouse(self, buttons, rel_move):
 
+        print("Received Mouse Input, sending it via Bluetooth")
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x02)
@@ -220,8 +219,7 @@ class BluetoothService(dbus.service.Object):
 
     @dbus.service.method('org.freedesktop.DBus.Introspectable', out_signature='s')
     def Introspect(self):
-        return ET.tostring(ET.parse(os.getcwd() + '/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8',
-                           method='xml')
+        return ET.tostring(ET.parse(os.getcwd()+'/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8', method='xml')
 
     def close(self):
         try:
@@ -229,127 +227,15 @@ class BluetoothService(dbus.service.Object):
         except:
             pass
 
-
-#####################################################################################################
-
-class App(Frame):
-    """
-    GUI Class
-    """
-
-    def __init__(self, master=None, width=200, height=400, background="white"):
-        Frame.__init__(self, master, width=width, height=height, bg=background)
-        self.pack(side="top", fill=BOTH, expand=True)
-
-        self.buttons_frame = Frame(self, bg="grey")
-        self.buttons_frame.pack(side="top", fill=X, expand=False)
-
-        self.buttons_variable = IntVar()
-        self.buttons_variable.set(0)
-
-        self.radio_buttons = []
-
-        for i in xrange(4):
-            self.radio_buttons.append(
-                Radiobutton(self.buttons_frame, variable=self.buttons_variable, activebackground="green", bg="white",
-                            selectcolor="green", relief="sunken", command=self.change_screen, value=i, indicatoron=0))
-            self.radio_buttons[i].pack(fill=X, expand=True, side=LEFT, padx=10, pady=10)
-
-        self.inner_frame = Frame(self, bg=background)
-        self.inner_frame.pack(side="top", fill=X, expand=True)
-        self.inner_frame.grid_rowconfigure(0, weight=1)
-        self.inner_frame.grid_columnconfigure(0, weight=1)
-
-        self.pageOne = PageOne(self.inner_frame)
-        self.pageOne.grid(row=0, column=0, sticky="nsew")
-
-        self.pageTwo = PageTwo(self.inner_frame)
-        self.pageTwo.grid(row=0, column=0, sticky="nsew")
-
-        self.change_screen()
-
-        DBusGMainLoop(set_as_default=True)
-        self.myservice = BluetoothService()
-
-    def change_screen(self):
-        index = self.buttons_variable.get()
-        if index == 0:
-            self.pageOne.tkraise()
-        elif index == 1:
-            self.pageTwo.tkraise()
-        print index
-
-
-class PageOne(Frame):
-    def __init__(self, master, background="white"):
-        Frame.__init__(self, master, bg=background)
-
-        global bluetoothStatus.set("Disabled")
-        global connectionStatus.set("Disabled")
-
-        self.frame1 = Frame(self, bg=background)
-        self.frame1.pack(side="top", fill="both", expand=True)
-
-        Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10, 20), pady=10)
-        Label(self.frame1, textvariable=self.bluetoothStatus, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
-                                                                              pady=10)
-
-        self.frame2 = Frame(self, bg=background)
-        self.frame2.pack(side="top", fill="both", expand=True)
-
-        Label(self.frame2, text="Connection Status: ", bg=background).pack(side=LEFT, padx=10, pady=10)
-        Label(self.frame2, textvariable=self.connectionStatus, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
-                                                                               pady=10)
-
-
-class PageTwo(Frame):
-    def __init__(self, master, background="white"):
-        Frame.__init__(self, master, bg=background)
-
-        self.container = Frame(self, bg=background)
-        self.container.pack(side="top")
-
-        self.buttons = []
-
-        for i in xrange(9):
-            self.buttons.append(Button(self.container, text=str(i + 1),
-                                       command=lambda row=i / 3, column=i % 3: self.button_press(row, column)))
-            self.buttons[i].grid(row=i / 3, column=i % 3, padx=20, pady=20)
-
-    def button_press(self, row, column):
-        print row * 3 + column + 1
-
-
-def update(application, keyboard, mouse):
-    try:
-        application.update_idletasks()
-        application.update()
-        keyboard.event_loop()
-        mouse.event_loop()
-        return True
-    except:
-        gtk.main_quit()
-        return False
-
-
+# main routine
 if __name__ == "__main__":
+    # we can only run as root
+    if not os.geteuid() == 0:
+        sys.exit("Only root can run this script")
 
-    root = Tk()
-    root.minsize(300, 400)
-    root.maxsize(300, 400)
-    app = App(root)
-
-    kb = Keyboard()
-    mouse = Mouse()
-
-    keyboardThread = Thread(target=kb.event_loop())
-    mouseThread = Thread(target=mouse.event_loop())
-
-    keyboardThread.start()
-    mouseThread.start()
-
-    keyboardThread.join()
-    mouseThread.join()
-
-    gobject.timeout_add(10, lambda: update(app, kb, mouse))
-    gtk.main()
+    try:
+        DBusGMainLoop(set_as_default=True)
+        myservice = BluetoothService()
+        gtk.main()
+    except KeyboardInterrupt:
+        myservice.close()

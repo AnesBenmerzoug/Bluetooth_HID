@@ -21,7 +21,12 @@ printf "\nInstalling evdev for reading/writing input events from the keyboard/mo
 sudo pip install evdev
 
 # DBUS Configuration
+
+printf"\nConfiguring the DBus service\n\n"
+
 sudo cp org.upwork.hidbluetooth.conf /etc/dbus-1/system.d
+
+print "\nRestarting the DBus service\n\n"
 
 sudo service dbus restart
 
