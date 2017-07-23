@@ -7,20 +7,22 @@ import dbus.mainloop.glib
 from bluetooth import *
 import xml.etree.ElementTree as ET
 
+import time
+
 import gtk
 import gobject
 from dbus.mainloop.glib import DBusGMainLoop
 
 from threading import Thread
 
-from keyboard.keyboard_client import Keyboard
-from mouse/mouse_client import Mouse
+import subprocess
+
+from keyboard_client import Keyboard
+from mouse_client import Mouse
 
 #####################################################################################################
 
-bluetoothStatus = StringVar()
-
-connectionStatus = StringVar()
+connection_status_message = "Disconnected"
 
 #####################################################################################################
 
@@ -67,7 +69,7 @@ class BluetoothBluezProfile(dbus.service.Object):
 # create a bluetooth device to emulate a HID keyboard/mouse,
 # advertize a SDP record using our bluez profile class
 #
-class BluetoothDevice(Thread):
+class BluetoothDevice():
     # change these constants
     MY_ADDRESS = "B8:27:EB:B6:8C:21"
     MY_DEV_NAME = "Bluetooth_Keyboard/Mouse"
@@ -81,7 +83,6 @@ class BluetoothDevice(Thread):
 
     def __init__(self):
 
-        Thread.__init__(self)
         self.init_bt_device()
         self.init_bluez_profile()
 
@@ -127,10 +128,6 @@ class BluetoothDevice(Thread):
 
         return fh.read()
 
-    def run(self):
-        print "starting thread"
-        self.listen()
-
     # listen for incoming client connections
 
     # ideally this would be handled by the Bluez 5 profile
@@ -140,13 +137,25 @@ class BluetoothDevice(Thread):
         self.scontrol = BluetoothSocket(L2CAP)
         self.sinterrupt = BluetoothSocket(L2CAP)
 
-        # bind these sockets to a port - port zero to select next available
-        self.scontrol.bind((self.MY_ADDRESS, self.P_CTRL))
-        self.sinterrupt.bind((self.MY_ADDRESS, self.P_INTR))
+	print "Binding sockets to a port"
+
+	while True:
+		try:
+        		# bind these sockets to a port - port zero to select next available
+        		self.scontrol.bind((self.MY_ADDRESS, self.P_CTRL))
+        		self.sinterrupt.bind((self.MY_ADDRESS, self.P_INTR))
+			break
+		except:
+			print "Failed to bind sockets to port"
+			time.sleep(1)
+
+	print "Listening on the server sockets"
 
         # Start listening on the server sockets
         self.scontrol.listen(1)  # Limit of 1 connection
         self.sinterrupt.listen(1)
+
+	print "Waiting for connection"
 
         self.ccontrol, cinfo = self.scontrol.accept()
         print("Got a connection on the control channel from " + cinfo[0])
@@ -154,9 +163,11 @@ class BluetoothDevice(Thread):
         self.cinterrupt, cinfo = self.sinterrupt.accept()
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
-        global connectionStatus
+	global connection_status_message
 
-        connectionStatus.set("Connected")
+	connection_status_message = "Connected"
+
+	return
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
@@ -166,8 +177,8 @@ class BluetoothDevice(Thread):
         self.scontrol.close()
         self.sinterrupt.close()
 
-        global connectionStatus
-        connectionStatus.set("Disconnected")
+	global connection_status_message
+	connection_status_message = "Disconnected"
 
 
 # define a dbus service that emulates a bluetooth keyboard and mouse
@@ -184,7 +195,8 @@ class BluetoothService(dbus.service.Object):
         self.device = BluetoothDevice()
 
         # start listening for connections
-        # self.device.listen()
+        self.device_listen_thread =  Thread(target=self.device.listen)
+	self.device_listen_thread.start()
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
@@ -226,6 +238,7 @@ class BluetoothService(dbus.service.Object):
     def close(self):
         try:
             self.device.close()
+	    self.device_listen_thread.join()
         except:
             pass
 
@@ -240,6 +253,9 @@ class App(Frame):
     def __init__(self, master=None, width=200, height=400, background="white"):
         Frame.__init__(self, master, width=width, height=height, bg=background)
         self.pack(side="top", fill=BOTH, expand=True)
+
+	DBusGMainLoop(set_as_default=True)
+        self.myservice = BluetoothService()
 
         self.buttons_frame = Frame(self, bg="grey")
         self.buttons_frame.pack(side="top", fill=X, expand=False)
@@ -268,9 +284,6 @@ class App(Frame):
 
         self.change_screen()
 
-        DBusGMainLoop(set_as_default=True)
-        self.myservice = BluetoothService()
-
     def change_screen(self):
         index = self.buttons_variable.get()
         if index == 0:
@@ -284,23 +297,39 @@ class PageOne(Frame):
     def __init__(self, master, background="white"):
         Frame.__init__(self, master, bg=background)
 
-        global bluetoothStatus.set("Disabled")
-        global connectionStatus.set("Disabled")
+	self.bluetooth_status = StringVar()
+	self.connection_status = StringVar()
+
+	self.bluetooth_status.set("Disabled")
+	self.connection_status.set("Disconnected")
 
         self.frame1 = Frame(self, bg=background)
         self.frame1.pack(side="top", fill="both", expand=True)
 
         Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10, 20), pady=10)
-        Label(self.frame1, textvariable=self.bluetoothStatus, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
+        self.bluetooth_status_label = Label(self.frame1, textvariable=self.bluetooth_status, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
                                                                               pady=10)
 
         self.frame2 = Frame(self, bg=background)
         self.frame2.pack(side="top", fill="both", expand=True)
 
         Label(self.frame2, text="Connection Status: ", bg=background).pack(side=LEFT, padx=10, pady=10)
-        Label(self.frame2, textvariable=self.connectionStatus, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
+        self.connection_status_label = Label(self.frame2, textvariable=self.connection_status, bg="red").pack(fill=X, expand=True, side=LEFT, padx=10,
                                                                                pady=10)
 
+    def update_bluetooth_status(self, status):
+	if status == "Enabled":
+		self.bluetooth_status.set("Enabled")
+		#self.bluetooth_status_label.configure(bg="green")
+	elif status == "Disabled":
+		self.bluetooth_status.set("Disabled")
+		#self.bluetooth_status_label.configure(bg="red")
+	return
+
+    def update_connection_status(self, status):
+	self.connection_status.set(status)
+
+    
 
 class PageTwo(Frame):
     def __init__(self, master, background="white"):
@@ -313,21 +342,41 @@ class PageTwo(Frame):
 
         for i in xrange(9):
             self.buttons.append(Button(self.container, text=str(i + 1),
-                                       command=lambda row=i / 3, column=i % 3: self.button_press(row, column)))
+                                       command=lambda row=i / 3, column=i % 3: self.on_press(row, column)))
+	    self.buttons[i].bind("<ButtonRelease>", self.on_release)
             self.buttons[i].grid(row=i / 3, column=i % 3, padx=20, pady=20)
 
-    def button_press(self, row, column):
-        print row * 3 + column + 1
+	self.bus = dbus.SystemBus()
+        self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
+        self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
+
+    def on_press(self, row, column):
+	button_id = row * 3 + column + 1
+        print "button " + (button_id) + " was pressed"
+	self.iface.send_keys(0, [button_id, 0, 0, 0, 0, 0])
+
+    def on_release(self, event):
+	self.iface.send_keys(0, [0, 0, 0, 0, 0, 0])
 
 
 def update(application, keyboard, mouse):
     try:
         application.update_idletasks()
         application.update()
-        keyboard.event_loop()
-        mouse.event_loop()
+
+	if ("UP" in subprocess.check_output("hciconfig hci0 | grep UP", shell=True)):
+		application.pageOne.update_bluetooth_status("Enabled")
+	else:
+		application.pageOne.update_bluetooth_status("Disabled")
+
+	global connection_status_message
+
+	application.pageOne.update_connection_status(connection_status_message)
+
         return True
     except:
+	keyboard.kill()
+    	mouse.kill()
         gtk.main_quit()
         return False
 
@@ -339,17 +388,12 @@ if __name__ == "__main__":
     root.maxsize(300, 400)
     app = App(root)
 
-    kb = Keyboard()
-    mouse = Mouse()
+    keyboardProcess = subprocess.Popen("python keyboard_client.py", shell="True")
+    mouseProcess = subprocess.Popen("python mouse_client.py", shell="True")
 
-    keyboardThread = Thread(target=kb.event_loop())
-    mouseThread = Thread(target=mouse.event_loop())
-
-    keyboardThread.start()
-    mouseThread.start()
-
-    keyboardThread.join()
-    mouseThread.join()
-
-    gobject.timeout_add(10, lambda: update(app, kb, mouse))
+    gobject.timeout_add(10, lambda: update(app, keyboardProcess, mouseProcess))
     gtk.main()
+
+    print "Closing Application"
+
+    
