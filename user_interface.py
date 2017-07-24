@@ -306,7 +306,9 @@ class ConnectionStatusLabel(Label):
     def update_text(self):
         text = self.queue.get()
         if text is not None:
-            self.status.set(self.queue.get())
+            self.status.set(text)
+        else
+            self.status.set("Disconnected")
         self.after(1000, self.update_text)
 
 
