@@ -176,8 +176,6 @@ class BluetoothDevice():
 class BluetoothService(dbus.service.Object):
     def __init__(self, queue):
 
-        DBusGMainLoop(set_as_default=True)
-
         print("Setting up service")
 
         # set up as a dbus service
@@ -189,8 +187,6 @@ class BluetoothService(dbus.service.Object):
 
         # start listening for connections
         self.device.listen()
-
-        gtk.main()
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
@@ -396,7 +392,9 @@ def create_mouse_process():
 def create_bluetooth_server_process(queue):
     try:
         print "Creating Bluetooth Service"
+        DBusGMainLoop(set_as_default=True)
         myservice = BluetoothService(queue)
+        gtk.main()
     finally:
         print "Done Creating Bluetooth Service"
         return
