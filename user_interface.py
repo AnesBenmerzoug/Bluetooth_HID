@@ -384,20 +384,21 @@ def create_bluetooth_server_process(queue):
     return
 
 if __name__ == "__main__":
+    connection_status_queue = multiprocessing.Queue()
+
+    bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process, args=(connection_status_queue,))
+    bluetoothProcess.start()
+
+    keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
+    keyboardProcess.start()
+
+    mouseProcess = multiprocessing.Process(target=create_mouse_process)
+    mouseProcess.start()
+
     root = Tk()
     root.minsize(300, 400)
     root.maxsize(300, 400)
     main_application = App(root)
-
-    connection_status_queue = multiprocessing.Queue()
-
-    keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    mouseProcess = multiprocessing.Process(target=create_mouse_process)
-    bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process, args=(connection_status_queue,))
-
-    keyboardProcess.start()
-    mouseProcess.start()
-    bluetoothProcess.start()
 
     while True:
         update(main_application, keyboardProcess, mouseProcess, bluetoothProcess, queue)
