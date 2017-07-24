@@ -16,10 +16,6 @@ import multiprocessing
 
 #####################################################################################################
 
-connection_status_message = "Disconnected"
-
-#####################################################################################################
-
 #
 # define a bluez 5 profile object for our keyboard/mouse
 #
@@ -242,9 +238,11 @@ class App(Frame):
     GUI Class
     """
 
-    def __init__(self, master=None, width=200, height=400, background="white"):
+    def __init__(self, master=None, width=200, height=400, background="white", connection_queue=None):
         Frame.__init__(self, master, width=width, height=height, bg=background)
         self.pack(side="top", fill=BOTH, expand=True)
+
+        self.queue = connection_queue
 
         self.buttons_frame = Frame(self, bg="grey")
         self.buttons_frame.pack(side="top", fill=X, expand=False)
@@ -265,7 +263,7 @@ class App(Frame):
         self.inner_frame.grid_rowconfigure(0, weight=1)
         self.inner_frame.grid_columnconfigure(0, weight=1)
 
-        self.pageOne = PageOne(self.inner_frame)
+        self.pageOne = PageOne(self.inner_frame, connection_queue=self.queue)
         self.pageOne.grid(row=0, column=0, sticky="nsew")
 
         self.pageTwo = PageTwo(self.inner_frame)
@@ -281,10 +279,40 @@ class App(Frame):
             self.pageTwo.tkraise()
         print index
 
+#############################################################################################################
+
+
+class BluetoothStatusLabel(Label):
+    def __init__(self, master, textvariable=None, bg="red"):
+        Label.__init__(self, master, textvariable=textvariable, bg=bg)
+        self.status = textvariable
+        self.update_text()
+
+    def update_text(self):
+        if "UP" in subprocess.check_output("hciconfig hci0 | grep UP", shell=True):
+            self.status.set("Enabled")
+        else:
+            self.status.set("Disabled")
+        self.after(1000, self.update_text)
+
+
+class ConnectionStatusLabel(Label):
+    def __init__(self, master, textvariable=None, bg="red", connection_queue=None):
+        Label.__init__(self, master, textvariable=textvariable, bg=bg)
+        self.status = textvariable
+        self.queue = connection_queue
+        self.update_text()
+
+    def update_text(self):
+        self.status.set(self.queue.get())
+        self.after(1000, self.update_text)
+
 
 class PageOne(Frame):
-    def __init__(self, master, background="white"):
+    def __init__(self, master, background="white", connection_queue=None):
         Frame.__init__(self, master, bg=background)
+
+        self.queue = connection_queue
 
         self.bluetooth_status = StringVar()
         self.connection_status = StringVar()
@@ -296,33 +324,25 @@ class PageOne(Frame):
         self.frame1.pack(side="top", fill="both", expand=True)
 
         Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10, 20), pady=10)
-        self.bluetooth_status_label = Label(self.frame1, textvariable=self.bluetooth_status, bg="red").pack(fill=X,
-                                                                                                            expand=True,
-                                                                                                            side=LEFT,
-                                                                                                            padx=10,
-                                                                                                            pady=10)
+
+        BluetoothStatusLabel(self.frame1, textvariable=self.bluetooth_status, bg="red").pack(fill=X,
+                                                                                            expand=True,
+                                                                                            side=LEFT,
+                                                                                            padx=10,
+                                                                                            pady=10)
 
         self.frame2 = Frame(self, bg=background)
         self.frame2.pack(side="top", fill="both", expand=True)
 
         Label(self.frame2, text="Connection Status: ", bg=background).pack(side=LEFT, padx=10, pady=10)
-        self.connection_status_label = Label(self.frame2, textvariable=self.connection_status, bg="red").pack(fill=X,
-                                                                                                              expand=True,
-                                                                                                              side=LEFT,
-                                                                                                              padx=10,
-                                                                                                              pady=10)
 
-    def update_bluetooth_status(self, status):
-        if status == "Enabled":
-            self.bluetooth_status.set("Enabled")
-        # self.bluetooth_status_label.configure(bg="green")
-        elif status == "Disabled":
-            self.bluetooth_status.set("Disabled")
-        # self.bluetooth_status_label.configure(bg="red")
-        return
+        ConnectionStatusLabel(self.frame2, textvariable=self.connection_status, bg="red", connection_queue=self.queue).pack(fill=X,
+                                                                                                                              expand=True,
+                                                                                                                              side=LEFT,
+                                                                                                                              padx=10,
+                                                                                                                              pady=10)
 
-    def update_connection_status(self, status):
-        self.connection_status.set(status)
+##########################################################################################################################
 
 
 class PageTwo(Frame):
@@ -352,30 +372,6 @@ class PageTwo(Frame):
 
     def on_release(self, event):
         self.iface.send_keys(0, [0, 0, 0, 0, 0, 0])
-        return
-
-
-def update(application, keyboard, mouse, bluetooth, queue):
-    try:
-        application.update_idletasks()
-        application.update()
-
-        """if "UP" in subprocess.check_output("hciconfig hci0 | grep UP", shell=True):
-            application.pageOne.update_bluetooth_status("Enabled")
-        else:
-            application.pageOne.update_bluetooth_status("Disabled")
-
-        try:
-            application.pageOne.update_connection_status(queue.get())
-        except:
-            pass"""
-
-        return True
-    except:
-        #keyboard.terminate()
-        mouse.terminate()
-        bluetooth.terminate()
-        return False
 
 
 def create_keyboard_process():
@@ -407,12 +403,13 @@ if __name__ == "__main__":
     root = Tk()
     root.minsize(300, 400)
     root.maxsize(300, 400)
-    main_application = App(root)
+    main_application = App(root, connection_queue=connection_status_queue)
 
-    while True:
-        try:
-            update(main_application, keyboardProcess, mouseProcess, bluetoothProcess, connection_status_queue)
-        except:
-            break
+    try:
+        main_application.mainloop()
+    finally:
+        #keyboardProcess.terminate()
+        mouseProcess.terminate()
+        bluetoothProcess.terminate()
 
     print "Closing Application"
