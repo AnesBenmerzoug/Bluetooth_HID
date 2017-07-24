@@ -378,13 +378,23 @@ class PageTwo(Frame):
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
+def update(app):
+    try:
+        app.update_idletasks()
+        app.update()
+    finally:
+        return
+
+
 def create_keyboard_process():
     subprocess.Popen("python keyboard_client.py", shell="True")
     return
 
+
 def create_mouse_process():
     subprocess.Popen("python mouse_client.py", shell="True")
     return
+
 
 def create_bluetooth_server_process(queue):
     try:
@@ -395,6 +405,7 @@ def create_bluetooth_server_process(queue):
     finally:
         print "Done Creating Bluetooth Service"
         return
+
 
 if __name__ == "__main__":
     connection_status_queue = multiprocessing.Queue()
@@ -413,6 +424,8 @@ if __name__ == "__main__":
     root.minsize(300, 400)
     root.maxsize(300, 400)
     main_application = App(root, connection_queue=connection_status_queue)
+
+    gobject.timeout_add(10, update, main_application)
 
     try:
         print "Starting user interface main loop"
