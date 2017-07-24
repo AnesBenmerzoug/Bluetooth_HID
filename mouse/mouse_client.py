@@ -100,15 +100,17 @@ class Mouse():
 
     # poll for mouse events
     def event_loop(self):
-        print "event loop"
-        for event in self.dev.read_loop():
-            print event
-            if event.type == ecodes.EV_KEY and event.value < 2:
-                self.change_state_button(event)
-                self.send_input()
-            elif event.type == ecodes.EV_REL:
-                self.change_state_movement(event)
-                self.send_input()
+        try:
+            for event in self.dev.read_loop():
+                print event
+                if event.type == ecodes.EV_KEY and event.value < 2:
+                    self.change_state_button(event)
+                    self.send_input()
+                elif event.type == ecodes.EV_REL:
+                    self.change_state_movement(event)
+                    self.send_input()
+        except KeyboardInterrupt:
+            return
 
     # forward mouse events to the dbus service
     def send_input(self):
