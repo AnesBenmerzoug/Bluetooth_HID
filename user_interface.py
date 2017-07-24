@@ -425,13 +425,10 @@ if __name__ == "__main__":
     root.maxsize(300, 400)
     main_application = App(root, connection_queue=connection_status_queue)
 
-    gobject.timeout_add(10, update, main_application)
-
     try:
         print "Starting user interface main loop"
-        print gtk.main_level()
-        while gtk.main_level() > 0:
-            continue
+        main_application.after(1, update(main_application))
+        main_application.mainloop()
     finally:
         print "Exiting user interface main loop"
         #keyboardProcess.terminate()
