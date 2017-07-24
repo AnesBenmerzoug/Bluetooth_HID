@@ -375,7 +375,7 @@ class PageTwo(Frame):
 
     def on_press(self, row, column):
         button_id = row * 3 + column + 1
-        shift = 20
+        shift = 29
 
         def sender(event):
             print "button " + str(button_id) + " was pressed"
