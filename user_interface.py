@@ -363,11 +363,12 @@ class PageTwo(Frame):
         self.buttons = []
 
 
-        for i in xrange(9):
-            self.buttons.append(Button(self.container, text=str(i + 1)))
-            self.buttons[i].bind("<ButtonPress-1>", lambda event: self.on_press(i/3, i%3))
-            self.buttons[i].bind("<ButtonRelease-1>", self.on_release)
-            self.buttons[i].grid(row=i/3, column=i%3, padx=20, pady=20)
+        for i in xrange(3):
+            for j in xrange(3):
+                self.buttons.append(Button(self.container, text=str(i*3+j+1)))
+                self.buttons[i*3+j].bind("<ButtonPress-1>", lambda event: self.on_press(i, j))
+                self.buttons[i*3+j].bind("<ButtonRelease-1>", self.on_release)
+                self.buttons[i*3+j].grid(row=i, column=j, padx=20, pady=20)
 
         self.bus = dbus.SystemBus()
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
