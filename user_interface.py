@@ -376,6 +376,7 @@ class PageTwo(Frame):
         self.iface.send_keys(0x00, [button_id+29, 0x00, 0x00, 0x00, 0x00, 0x00])
 
     def on_release(self, event):
+        print "button was released"
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
