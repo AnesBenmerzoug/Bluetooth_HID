@@ -356,7 +356,7 @@ class PageTwo(Frame):
 
         for i in xrange(9):
             self.buttons.append(Button(self.container, text=str(i + 1),
-                                       command=lambda row=i / 3, column=i % 3: self.on_press(row, column)))
+                                       command=lambda row=i/3, column=i%3: self.on_press(row, column)))
             self.buttons[i].bind("<ButtonRelease>", self.on_release)
             self.buttons[i].grid(row=i / 3, column=i % 3, padx=20, pady=20)
 
@@ -368,10 +368,10 @@ class PageTwo(Frame):
         button_id = row * 3 + column + 1
         print "button " + str(button_id) + " was pressed"
         print "sending " + str(button_id+29)
-        self.iface.send_keys(0, [button_id+29, 0, 0, 0, 0, 0])
+        self.iface.send_keys(0x00, [int(str(button_id+29),2), 0x00, 0x00, 0x00, 0x00, 0x00])
 
     def on_release(self, event):
-        self.iface.send_keys(0, [0, 0, 0, 0, 0, 0])
+        self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
 def create_keyboard_process():
