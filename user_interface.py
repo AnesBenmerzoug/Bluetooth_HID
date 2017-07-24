@@ -362,11 +362,10 @@ class PageTwo(Frame):
 
         self.buttons = []
 
-
         for i in xrange(3):
             for j in xrange(3):
                 self.buttons.append(Button(self.container, text=str(i*3+j+1)))
-                self.buttons[i*3+j].bind("<ButtonPress-1>", lambda event: lambda row=i, column=j: self.on_press(row, column))
+                self.buttons[i*3+j].bind("<ButtonPress-1>", self.on_press(i, j))
                 self.buttons[i*3+j].bind("<ButtonRelease-1>", self.on_release)
                 self.buttons[i*3+j].grid(row=i, column=j, padx=20, pady=20)
 
@@ -376,9 +375,12 @@ class PageTwo(Frame):
 
     def on_press(self, row, column):
         button_id = row * 3 + column + 1
-        print "button " + str(button_id) + " was pressed"
-        print "sending " + str(button_id+29)
-        self.iface.send_keys(0x00, [button_id+29, 0x00, 0x00, 0x00, 0x00, 0x00])
+
+        def sender(event):
+            print "button " + str(button_id) + " was pressed"
+            print "sending " + str(button_id + 10)
+            self.iface.send_keys(0x00, [button_id + 10, 0x00, 0x00, 0x00, 0x00, 0x00])
+        return sender
 
     def on_release(self, event):
         print "button was released"
