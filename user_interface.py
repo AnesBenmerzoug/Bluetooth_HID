@@ -387,12 +387,14 @@ def create_mouse_process():
     return
 
 def create_bluetooth_server_process(queue):
-    print "Creating Bluetooth Service"
-    DBusGMainLoop(set_as_default=True)
-    myservice = BluetoothService(queue)
-    gtk.main()
-    print "Done Creating Bluetooth Service"
-    return
+    try:
+        print "Creating Bluetooth Service"
+        DBusGMainLoop(set_as_default=True)
+        myservice = BluetoothService(queue)
+        gtk.main()
+    finally:
+        print "Done Creating Bluetooth Service"
+        return
 
 if __name__ == "__main__":
     connection_status_queue = multiprocessing.Queue()
@@ -415,8 +417,8 @@ if __name__ == "__main__":
     try:
         print "Starting user interface main loop"
         main_application.mainloop()
-        print "Exiting user interface main loop"
     finally:
+        print "Exiting user interface main loop"
         #keyboardProcess.terminate()
         mouseProcess.terminate()
         bluetoothProcess.terminate()
