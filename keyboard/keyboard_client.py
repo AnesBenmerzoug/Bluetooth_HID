@@ -60,6 +60,8 @@ class Keyboard():
             0x00,
             0x00]
 
+        self.run = True
+
         print "Setting up DBus Client"
 
         self.bus = dbus.SystemBus()
@@ -107,16 +109,22 @@ class Keyboard():
                     self.state[i] = hex_key
                     break
 
+        print self.state[2]
+        print self.state[4:10]
+
+        if self.state[2] == 1 and 6 in self.state[4:10]:
+            self.run = False
+
     # poll for keyboard events
     def event_loop(self):
-        try:
-            for event in self.dev.read_loop():
-                # only bother if we hit a key and its an up or down event
-                if event.type == ecodes.EV_KEY and event.value < 2:
-                    self.change_state(event)
-                    self.send_input()
-        except KeyboardInterrupt:
-            return
+        for event in self.dev.read_loop():
+            if not self.run:
+                break
+            # only bother if we hit a key and its an up or down event
+            if event.type == ecodes.EV_KEY and event.value < 2:
+                self.change_state(event)
+                self.send_input()
+        return
 
     # forward keyboard events to the dbus service
     def send_input(self):
