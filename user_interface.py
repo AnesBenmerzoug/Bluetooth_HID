@@ -380,7 +380,7 @@ class PageTwo(Frame):
         def sender(event):
             print "button " + str(button_id) + " was pressed"
             print "sending " + str(button_id + shift)
-            self.iface.send_keys(0x80, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
+            self.iface.send_keys(0x40, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
         return sender
 
     def on_release(self, event):
