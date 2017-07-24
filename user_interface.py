@@ -304,7 +304,9 @@ class ConnectionStatusLabel(Label):
         self.update_text()
 
     def update_text(self):
-        self.status.set(self.queue.get())
+        text = self.queue.get()
+        if text is not None:
+            self.status.set(self.queue.get())
         self.after(1000, self.update_text)
 
 
@@ -390,6 +392,7 @@ def create_bluetooth_server_process(queue):
 
 if __name__ == "__main__":
     connection_status_queue = multiprocessing.Queue()
+    connection_status_queue.put("Disconnected")
 
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process, args=(connection_status_queue,))
     bluetoothProcess.start()
@@ -411,5 +414,7 @@ if __name__ == "__main__":
         #keyboardProcess.terminate()
         mouseProcess.terminate()
         bluetoothProcess.terminate()
+        connection_status_queue.close()
+        connection_status_queue.join_thread()
 
     print "Closing Application"
