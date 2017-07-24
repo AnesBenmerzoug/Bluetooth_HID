@@ -297,18 +297,20 @@ class BluetoothStatusLabel(Label):
 
 class ConnectionStatusLabel(Label):
     def __init__(self, master, textvariable=None, bg="red", connection_queue=None):
-        Label.__init__(self, master, textvariable=textvariable, bg=bg)
-        self.status = textvariable
+        Label.__init__(self, master, bg=bg)
         self.queue = connection_queue
         self.update_text()
 
     def update_text(self):
-        #text = self.queue.get()
-        text = "Disconnected"
+        text = self.queue.get()
+        #text = "Disconnected"
         if text is not None:
-            self.status.set(text)
+            if text is "Connected":
+                self.configure(bg="green", text=text)
+            else:
+                self.configure(bg="red", text=text)
         else:
-            self.status.set("Disconnected")
+            self.configure(bg="red", text="Disconnected")
         self.after(1000, self.update_text)
 
 
@@ -340,11 +342,11 @@ class PageOne(Frame):
 
         Label(self.frame2, text="Connection Status: ", bg=background).pack(side=LEFT, padx=10, pady=10)
 
-        ConnectionStatusLabel(self.frame2, textvariable=self.connection_status, bg="red", connection_queue=self.queue).pack(fill=X,
-                                                                                                                              expand=True,
-                                                                                                                              side=LEFT,
-                                                                                                                              padx=10,
-                                                                                                                              pady=10)
+        ConnectionStatusLabel(self.frame2, bg="red", connection_queue=self.queue).pack(fill=X,
+                                                                                      expand=True,
+                                                                                      side=LEFT,
+                                                                                      padx=10,
+                                                                                      pady=10)
 
 ##########################################################################################################################
 
@@ -426,7 +428,5 @@ if __name__ == "__main__":
         #keyboardProcess.terminate()
         mouseProcess.terminate()
         bluetoothProcess.terminate()
-        connection_status_queue.close()
-        connection_status_queue.join_thread()
 
     print "Closing Application"
