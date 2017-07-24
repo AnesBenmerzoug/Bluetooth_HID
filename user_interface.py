@@ -313,10 +313,11 @@ class ConnectionStatusLabel(Label):
             print "Failed to get text"
             pass
         print "text = " + self.text
-        if self.text is "Connected":
+        self.configure(text=self.text)
+        """if self.text is "Connected":
             self.configure(bg="green", text="Connected")
         else:
-            self.configure(bg="red", text="Disconnected")
+            self.configure(bg="red", text="Disconnected")"""
         self.after(1000, self.update_text)
 
 
