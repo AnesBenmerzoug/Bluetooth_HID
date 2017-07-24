@@ -308,12 +308,13 @@ class ConnectionStatusLabel(Label):
             print "Trying to get text"
             global connection_status_queue
             print "the queue is empty " + str(connection_status_queue.empty())
-            self.text = connection_status_queue.get(True, 1)
+            self.text = connection_status_queue.get(True, 0.1)
         except:
             print "Failed to get text"
             pass
         print "text = " + self.text
         self.configure(text=self.text)
+        self.configure(bg="blue")
         """if self.text is "Connected":
             self.configure(bg="green", text="Connected")
         else:
