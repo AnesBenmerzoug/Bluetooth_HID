@@ -44,7 +44,8 @@ class Mouse():
 
         # keep trying to find a mouse
         have_dev = False
-        while have_dev == False:
+        count = 0
+        while have_dev is False or count != 50:
             try:
                 # try and get a mouse - loop through all devices and try to find a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -52,10 +53,14 @@ class Mouse():
                     if "mouse" in device.name.lower():
                         self.dev = InputDevice(device.fn)
                         have_dev = True
-            except OSError:
+            except:
                 print "Mouse not found, waiting 3 seconds and retrying"
-                time.sleep(3)
+                time.sleep(5)
+            count += 1
         print "Mouse Found"
+
+        print "Starting mouse event loop"
+        self.event_loop()
 
     # take care of mouse buttons
     def change_state_button(self, event):
@@ -128,6 +133,3 @@ class Mouse():
 if __name__ == "__main__":
     print "Setting up mouse"
     mouse = Mouse()
-
-    print "starting event loop"
-    mouse.event_loop()
