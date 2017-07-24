@@ -410,6 +410,6 @@ if __name__ == "__main__":
     main_application = App(root)
 
     while True:
-        update(main_application, keyboardProcess, mouseProcess, bluetoothProcess, queue)
+        update(main_application, keyboardProcess, mouseProcess, bluetoothProcess, connection_status_queue)
 
     print "Closing Application"
