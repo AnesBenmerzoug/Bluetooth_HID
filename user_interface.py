@@ -402,7 +402,7 @@ if __name__ == "__main__":
     bluetoothProcess.start()
 
     keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    keyboardProcess.start()
+    #keyboardProcess.start()
 
     mouseProcess = multiprocessing.Process(target=create_mouse_process)
     mouseProcess.start()
