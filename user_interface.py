@@ -429,7 +429,7 @@ if __name__ == "__main__":
 
     try:
         print "Starting user interface main loop"
-        main_application.mainloop()
+        #main_application.mainloop()
     finally:
         print "Exiting user interface main loop"
         #keyboardProcess.terminate()
