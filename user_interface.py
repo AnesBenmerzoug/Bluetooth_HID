@@ -372,7 +372,7 @@ class PageTwo(Frame):
         button_id = row * 3 + column + 1
         print "button " + str(button_id) + " was pressed"
         print "sending " + str(button_id+29)
-        self.iface.send_keys(0x00, [int(str(button_id+29),2), 0x00, 0x00, 0x00, 0x00, 0x00])
+        self.iface.send_keys(0x00, [button_id+29, 0x00, 0x00, 0x00, 0x00, 0x00])
 
     def on_release(self, event):
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
@@ -387,9 +387,11 @@ def create_mouse_process():
     return
 
 def create_bluetooth_server_process(queue):
+    print "Creating Bluetooth Service"
     DBusGMainLoop(set_as_default=True)
     myservice = BluetoothService(queue)
     gtk.main()
+    print "Done Creating Bluetooth Service"
     return
 
 if __name__ == "__main__":
@@ -411,7 +413,9 @@ if __name__ == "__main__":
     main_application = App(root, connection_queue=connection_status_queue)
 
     try:
+        print "Starting user interface main loop"
         main_application.mainloop()
+        print "Exiting user interface main loop"
     finally:
         #keyboardProcess.terminate()
         mouseProcess.terminate()
