@@ -366,7 +366,7 @@ class PageTwo(Frame):
         for i in xrange(3):
             for j in xrange(3):
                 self.buttons.append(Button(self.container, text=str(i*3+j+1)))
-                self.buttons[i*3+j].bind("<ButtonPress-1>", lambda event: self.on_press(i, j))
+                self.buttons[i*3+j].bind("<ButtonPress-1>", lambda event: lambda row=i, column=j: self.on_press(row, column))
                 self.buttons[i*3+j].bind("<ButtonRelease-1>", self.on_release)
                 self.buttons[i*3+j].grid(row=i, column=j, padx=20, pady=20)
 
