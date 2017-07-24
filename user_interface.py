@@ -342,11 +342,11 @@ class PageOne(Frame):
 
         Label(self.frame2, text="Connection Status: ", bg=background).pack(side=LEFT, padx=10, pady=10)
 
-        ConnectionStatusLabel(self.frame2, bg="red", connection_queue=self.queue).pack(fill=X,
-                                                                                      expand=True,
-                                                                                      side=LEFT,
-                                                                                      padx=10,
-                                                                                      pady=10)
+        ConnectionStatusLabel(self.frame2, bg="red").pack(fill=X,
+                                                          expand=True,
+                                                          side=LEFT,
+                                                          padx=10,
+                                                          pady=10)
 
 ##########################################################################################################################
 
