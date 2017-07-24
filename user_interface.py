@@ -204,10 +204,10 @@ class BluetoothService(dbus.service.Object):
         count = 0
         for key_code in keys:
             if count < 6:
+                print chr(key_code)
                 cmd_str += chr(key_code)
             count += 1
 
-        print cmd_str
         self.device.send_string(cmd_str)
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='iai')
