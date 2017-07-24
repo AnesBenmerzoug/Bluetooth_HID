@@ -130,8 +130,6 @@ class BluetoothDevice():
 
         return fh.read()
 
-
-
     # listen for incoming client connections
 
     # ideally this would be handled by the Bluez 5 profile
@@ -416,7 +414,7 @@ if __name__ == "__main__":
     bluetoothProcess.start()
 
     keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    #keyboardProcess.start()
+    keyboardProcess.start()
 
     mouseProcess = multiprocessing.Process(target=create_mouse_process)
     mouseProcess.start()
@@ -431,7 +429,7 @@ if __name__ == "__main__":
         main_application.mainloop()
     finally:
         print "Exiting user interface main loop"
-        #keyboardProcess.terminate()
+        keyboardProcess.terminate()
         mouseProcess.terminate()
         bluetoothProcess.terminate()
 
