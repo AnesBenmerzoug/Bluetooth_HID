@@ -8,6 +8,7 @@
 
 import os
 import sys
+import argparse
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -72,9 +73,11 @@ class BluetoothDevice():
     SDP_RECORD_PATH = sys.path[0] + "/sdp_record.xml"  # file path of the sdp record to load
     UUID = "00001124-0000-1000-8000-00805f9b34fb"
 
-    def __init__(self):
+    def __init__(self, queue):
 
         print("Setting up Bluetooth device")
+
+        self.queue = queue
 
         self.init_bt_device()
         self.init_bluez_profile()
@@ -155,6 +158,8 @@ class BluetoothDevice():
         self.cinterrupt, cinfo = self.sinterrupt.accept()
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
+        self.queue.put("Connected")
+
     # send a string to the bluetooth host machine
     def send_string(self, message):
 
@@ -162,6 +167,7 @@ class BluetoothDevice():
         self.cinterrupt.send(message)
 
     def close(self):
+        self.queue.put("Disconnected")
         self.scontrol.close()
         self.sinterrupt.close()
 
@@ -178,8 +184,10 @@ class BluetoothService(dbus.service.Object):
         bus_name = dbus.service.BusName("org.upwork.HidBluetoothService", bus=dbus.SystemBus())
         dbus.service.Object.__init__(self, bus_name, "/org/upwork/HidBluetoothService")
 
+        queue = sys.argv[1]
+
         # create and setup our device
-        self.device = BluetoothDevice()
+        self.device = BluetoothDevice(queue)
 
         # start listening for connections
         self.device.listen()
