@@ -429,7 +429,8 @@ if __name__ == "__main__":
 
     try:
         print "Starting user interface main loop"
-        #main_application.mainloop()
+        while gtk.main_level() > 0:
+            continue
     finally:
         print "Exiting user interface main loop"
         #keyboardProcess.terminate()
