@@ -1,7 +1,14 @@
 from Tkinter import *
+import os
+import sys
 import dbus
 import dbus.service
 import dbus.mainloop.glib
+from bluetooth import *
+import xml.etree.ElementTree as ET
+
+import gtk
+from dbus.mainloop.glib import DBusGMainLoop
 
 import subprocess
 import multiprocessing
@@ -380,7 +387,9 @@ def create_mouse_process():
     return
 
 def create_bluetooth_server_process(queue):
-    BluetoothService(queue)
+    DBusGMainLoop(set_as_default=True)
+    myservice = BluetoothService(queue)
+    gtk.main()
     return
 
 if __name__ == "__main__":
