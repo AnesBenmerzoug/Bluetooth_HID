@@ -343,6 +343,7 @@ class PageTwo(Frame):
 
     def on_release(self, event):
         #self.iface.send_keys(0, [0, 0, 0, 0, 0, 0])
+        return
 
 
 def update(application, keyboard, mouse, bluetooth, queue):
