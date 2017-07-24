@@ -283,16 +283,15 @@ class App(Frame):
 
 
 class BluetoothStatusLabel(Label):
-    def __init__(self, master, textvariable=None, bg="red"):
-        Label.__init__(self, master, textvariable=textvariable, bg=bg)
-        self.status = textvariable
+    def __init__(self, master, bg="red"):
+        Label.__init__(self, master, bg=bg)
         self.update_text()
 
     def update_text(self):
         if "UP" in subprocess.check_output("hciconfig hci0 | grep UP", shell=True):
-            self.status.set("Enabled")
+            self.configure(bg="green", text="Enabled")
         else:
-            self.status.set("Disabled")
+            self.configure(bg="red", text="Disabled")
         self.after(1000, self.update_text)
 
 
@@ -330,11 +329,11 @@ class PageOne(Frame):
 
         Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10, 20), pady=10)
 
-        BluetoothStatusLabel(self.frame1, textvariable=self.bluetooth_status, bg="red").pack(fill=X,
-                                                                                            expand=True,
-                                                                                            side=LEFT,
-                                                                                            padx=10,
-                                                                                            pady=10)
+        BluetoothStatusLabel(self.frame1, bg="red").pack(fill=X,
+                                                        expand=True,
+                                                        side=LEFT,
+                                                        padx=10,
+                                                        pady=10)
 
         self.frame2 = Frame(self, bg=background)
         self.frame2.pack(side="top", fill="both", expand=True)
@@ -402,7 +401,7 @@ def create_bluetooth_server_process(queue):
 
 
 if __name__ == "__main__":
-    connection_status_queue = multiprocessing.Queue()
+    connection_status_queue = multiprocessing.Manager.Queue()
     connection_status_queue.put("Disconnected")
 
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process, args=(connection_status_queue,))
