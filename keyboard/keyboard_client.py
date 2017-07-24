@@ -53,7 +53,7 @@ class Keyboard():
         # keep trying to key a keyboard
         have_dev = False
         count = 0
-        while have_dev is False or count != 50:
+        while have_dev is False and count < 50:
             try:
                 print "trying to find keyboard"
                 # try and get a keyboard - loop through all devices and try to find a keyboard
@@ -66,10 +66,14 @@ class Keyboard():
                 print "Keyboard not found, waiting 3 seconds and retrying"
                 time.sleep(5)
             count += 1
-        print "Keyboard Found"
 
-        print "Starting keyboard event loop"
-        self.event_loop()
+        if count == 50:
+            print "Keyboard not Found"
+            return
+        else:
+            print "Keyboard Found"
+            print "Starting keyboard event loop"
+            self.event_loop()
 
     def change_state(self, event):
         evdev_code = ecodes.KEY[event.code]
