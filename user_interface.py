@@ -204,7 +204,6 @@ class BluetoothService(dbus.service.Object):
         count = 0
         for key_code in keys:
             if count < 6:
-                print chr(key_code)
                 cmd_str += chr(key_code)
             count += 1
 
@@ -411,8 +410,9 @@ if __name__ == "__main__":
     main_application = App(root)
 
     while True:
-        update(main_application, keyboardProcess, mouseProcess, bluetoothProcess, connection_status_queue)
-
-
+        try:
+            update(main_application, keyboardProcess, mouseProcess, bluetoothProcess, connection_status_queue)
+        except:
+            break
 
     print "Closing Application"
