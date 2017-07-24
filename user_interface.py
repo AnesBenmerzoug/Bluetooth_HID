@@ -429,6 +429,7 @@ if __name__ == "__main__":
 
     try:
         print "Starting user interface main loop"
+        print gtk.main_level()
         while gtk.main_level() > 0:
             continue
     finally:
