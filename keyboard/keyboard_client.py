@@ -54,6 +54,7 @@ class Keyboard():
         have_dev = False
         while have_dev == False:
             try:
+                print "trying to find keyboard"
                 # try and get a keyboard - loop through all devices and try to find a keyboard
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
