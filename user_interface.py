@@ -403,7 +403,7 @@ def create_bluetooth_server_process(queue):
 
 
 if __name__ == "__main__":
-    connection_status_queue = multiprocessing.Manager().Queue()
+    connection_status_queue = multiprocessing.Queue()
     connection_status_queue.put("Disconnected")
 
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process, args=(connection_status_queue,))
