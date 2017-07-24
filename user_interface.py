@@ -158,6 +158,7 @@ class BluetoothDevice():
         self.cinterrupt, cinfo = self.sinterrupt.accept()
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
+        print "Putting something into the queue"
         self.queue.put("Connected")
 
     # send a string to the bluetooth host machine
@@ -167,6 +168,7 @@ class BluetoothDevice():
         self.cinterrupt.send(message)
 
     def close(self):
+        print "Putting the last one into the queue"
         self.queue.put("Disconnected")
         self.scontrol.close()
         self.sinterrupt.close()
@@ -306,8 +308,10 @@ class ConnectionStatusLabel(Label):
 
     def update_text(self):
         try:
+            print "Trying to get text"
             self.text = self.queue.get(False)
         except Empty:
+            print "Failed to get text"
             pass
         if self.text is "Connected":
             self.configure(bg="green", text="Connected")
@@ -380,7 +384,7 @@ class PageTwo(Frame):
         def sender(event):
             print "button " + str(button_id) + " was pressed"
             print "sending " + str(button_id + shift)
-            self.iface.send_keys(0x40, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
+            self.iface.send_keys(0x02, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
         return sender
 
     def on_release(self, event):
