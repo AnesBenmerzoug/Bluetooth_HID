@@ -363,8 +363,6 @@ def update(application, keyboard, mouse, bluetooth, queue):
         else:
             application.pageOne.update_bluetooth_status("Disabled")
 
-        global connection_status_message
-
         try:
             application.pageOne.update_connection_status(queue.get())
         except:
@@ -387,7 +385,7 @@ def create_mouse_process():
     return
 
 def create_bluetooth_server_process(queue):
-    DBusGMainLoop(set_as_default=True)
+    DBusGMainLoop()
     myservice = BluetoothService(queue)
     gtk.main()
     return
@@ -399,10 +397,10 @@ if __name__ == "__main__":
     bluetoothProcess.start()
 
     keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    keyboardProcess.start()
+    #keyboardProcess.start()
 
     mouseProcess = multiprocessing.Process(target=create_mouse_process)
-    mouseProcess.start()
+    #mouseProcess.start()
 
     root = Tk()
     root.minsize(300, 400)
