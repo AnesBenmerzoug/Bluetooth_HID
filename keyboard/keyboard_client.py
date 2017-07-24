@@ -55,7 +55,6 @@ class Keyboard():
         count = 0
         while have_dev is False and count < 50:
             try:
-                print "trying to find keyboard"
                 # try and get a keyboard - loop through all devices and try to find a keyboard
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
@@ -63,7 +62,7 @@ class Keyboard():
                         self.dev = InputDevice(device.fn)
                         have_dev = True
             except:
-                print "Keyboard not found, waiting 3 seconds and retrying"
+                print "Keyboard not found, waiting 5 seconds and retrying"
                 time.sleep(5)
             count += 1
 

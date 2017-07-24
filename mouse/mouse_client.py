@@ -54,7 +54,7 @@ class Mouse():
                         self.dev = InputDevice(device.fn)
                         have_dev = True
             except:
-                print "Mouse not found, waiting 3 seconds and retrying"
+                print "Mouse not found, waiting 5 seconds and retrying"
                 time.sleep(5)
             count += 1
 
