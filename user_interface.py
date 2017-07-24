@@ -359,7 +359,7 @@ def update(application, keyboard, mouse, bluetooth, queue):
         application.update_idletasks()
         application.update()
 
-        if "UP" in subprocess.check_output("hciconfig hci0 | grep UP", shell=True):
+        """if "UP" in subprocess.check_output("hciconfig hci0 | grep UP", shell=True):
             application.pageOne.update_bluetooth_status("Enabled")
         else:
             application.pageOne.update_bluetooth_status("Disabled")
@@ -367,7 +367,7 @@ def update(application, keyboard, mouse, bluetooth, queue):
         try:
             application.pageOne.update_connection_status(queue.get())
         except:
-            pass
+            pass"""
 
         return True
     except:
