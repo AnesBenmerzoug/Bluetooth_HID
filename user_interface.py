@@ -302,8 +302,8 @@ class ConnectionStatusLabel(Label):
         self.update_text()
 
     def update_text(self):
-        text = self.queue.get()
-        #text = "Disconnected"
+        #text = self.queue.get()
+        text = "Disconnected"
         if text is not None:
             if text is "Connected":
                 self.configure(bg="green", text=text)
@@ -363,7 +363,7 @@ class PageTwo(Frame):
         for i in xrange(9):
             self.buttons.append(Button(self.container, text=str(i + 1),
                                        command=lambda row=i/3, column=i%3: self.on_press(row, column)))
-            self.buttons[i].bind("<ButtonRelease>", self.on_release)
+            self.buttons[i].bind("<ButtonRelease-1>", self.on_release)
             self.buttons[i].grid(row=i / 3, column=i % 3, padx=20, pady=20)
 
         self.bus = dbus.SystemBus()
