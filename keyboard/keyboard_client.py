@@ -80,8 +80,9 @@ class Keyboard():
                     if "keyboard" in device.name.lower():
                         self.dev = InputDevice(device.fn)
                         have_dev = True
-            except OSError:
+            except OSError as err:
                 print "Keyboard not found, waiting 3 seconds and retrying"
+                print err.args
                 time.sleep(3)
         print "Keyboard Found"
 

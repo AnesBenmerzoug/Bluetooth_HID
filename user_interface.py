@@ -347,7 +347,7 @@ class PageTwo(Frame):
     def on_press(self, row, column):
         button_id = row * 3 + column + 1
         print "button " + str(button_id) + " was pressed"
-        self.iface.send_keys(0, [button_id, 0, 0, 0, 0, 0])
+        self.iface.send_keys(0, [button_id+29, 0, 0, 0, 0, 0])
 
     def on_release(self, event):
         self.iface.send_keys(0, [0, 0, 0, 0, 0, 0])
@@ -371,7 +371,7 @@ def update(application, keyboard, mouse, bluetooth, queue):
 
         return True
     except:
-        keyboard.terminate()
+        #keyboard.terminate()
         mouse.terminate()
         bluetooth.terminate()
         return False
@@ -388,11 +388,7 @@ def create_mouse_process():
 def create_bluetooth_server_process(queue):
     DBusGMainLoop(set_as_default=True)
     myservice = BluetoothService(queue)
-    #.timeout_add(10, dummy_callback)
     gtk.main()
-    return
-
-def dummy_callback():
     return
 
 if __name__ == "__main__":
