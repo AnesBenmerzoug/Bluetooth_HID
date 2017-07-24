@@ -176,6 +176,8 @@ class BluetoothDevice():
 class BluetoothService(dbus.service.Object):
     def __init__(self, queue):
 
+        DBusGMainLoop(set_as_default=True)
+
         print("Setting up service")
 
         # set up as a dbus service
@@ -187,6 +189,8 @@ class BluetoothService(dbus.service.Object):
 
         # start listening for connections
         self.device.listen()
+
+        gtk.main()
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
@@ -378,14 +382,6 @@ class PageTwo(Frame):
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
-def update(app):
-    try:
-        app.update_idletasks()
-        app.update()
-    finally:
-        return
-
-
 def create_keyboard_process():
     subprocess.Popen("python keyboard_client.py", shell="True")
     return
@@ -399,9 +395,7 @@ def create_mouse_process():
 def create_bluetooth_server_process(queue):
     try:
         print "Creating Bluetooth Service"
-        DBusGMainLoop(set_as_default=True)
         myservice = BluetoothService(queue)
-        gtk.main()
     finally:
         print "Done Creating Bluetooth Service"
         return
@@ -427,7 +421,6 @@ if __name__ == "__main__":
 
     try:
         print "Starting user interface main loop"
-        main_application.after(1, update(main_application))
         main_application.mainloop()
     finally:
         print "Exiting user interface main loop"
