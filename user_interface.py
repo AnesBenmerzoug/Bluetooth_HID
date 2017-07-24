@@ -11,6 +11,8 @@ import gtk
 from dbus.mainloop.glib import DBusGMainLoop
 import gobject
 
+from Queue import Empty
+
 import subprocess
 import multiprocessing
 
@@ -296,14 +298,16 @@ class BluetoothStatusLabel(Label):
 
 
 class ConnectionStatusLabel(Label):
-    def __init__(self, master, textvariable=None, bg="red", connection_queue=None):
+    def __init__(self, master, bg="red", connection_queue=None):
         Label.__init__(self, master, bg=bg)
         self.queue = connection_queue
         self.update_text()
 
     def update_text(self):
-        text = self.queue.get(True, 1)
-        #text = "Disconnected"
+        try:
+            text = self.queue.get(False)
+        except Empty:
+            text = "Disconnected"
         if text is not None:
             if text is "Connected":
                 self.configure(bg="green", text=text)
