@@ -302,20 +302,17 @@ class ConnectionStatusLabel(Label):
         Label.__init__(self, master, bg=bg)
         self.queue = connection_queue
         self.text = "Disconnected"
-        self.text_old = self.text
         self.update_text()
 
     def update_text(self):
         try:
-            self.text_old = self.text
             self.text = self.queue.get(False)
         except Empty:
             pass
-        if self.text is not self.text_old:
-            if self.text is "Connected":
-                self.configure(bg="green", text=self.text)
-            else:
-                self.configure(bg="red", text=self.text)
+        if self.text is "Connected":
+            self.configure(bg="green", text="Connected")
+        else:
+            self.configure(bg="red", text="Disconnected")
         self.after(1000, self.update_text)
 
 
@@ -365,11 +362,12 @@ class PageTwo(Frame):
 
         self.buttons = []
 
+
         for i in xrange(9):
-            self.buttons.append(Button(self.container, text=str(i + 1),
-                                       command=lambda row=i/3, column=i%3: self.on_press(row, column)))
+            self.buttons.append(Button(self.container, text=str(i + 1)))
+            self.buttons[i].bind("<ButtonPress-1>", lambda event: self.on_press(i/3, i%3))
             self.buttons[i].bind("<ButtonRelease-1>", self.on_release)
-            self.buttons[i].grid(row=i / 3, column=i % 3, padx=20, pady=20)
+            self.buttons[i].grid(row=i/3, column=i%3, padx=20, pady=20)
 
         self.bus = dbus.SystemBus()
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
