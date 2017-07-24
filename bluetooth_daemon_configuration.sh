@@ -22,7 +22,7 @@ $cmd1 &>/dev/null &
 
 sleep 0.2
 
-$cmd2 &>/dev/null &
+#$cmd2 &>/dev/null &
 
 sleep 0.2
 
