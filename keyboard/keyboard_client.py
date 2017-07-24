@@ -113,7 +113,7 @@ class Keyboard():
         print self.state[2]
         print self.state[4:10]
 
-        if self.state[2] == 1 and 6 in self.state[4:10]:
+        if self.state[2] == 7 and 6 in self.state[4:10]:
             self.run = False
 
     # poll for keyboard events

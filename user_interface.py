@@ -207,6 +207,7 @@ class BluetoothService(dbus.service.Object):
                 cmd_str += chr(key_code)
             count += 1
 
+        print cmd_str
         self.device.send_string(cmd_str)
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='iai')
@@ -347,6 +348,7 @@ class PageTwo(Frame):
     def on_press(self, row, column):
         button_id = row * 3 + column + 1
         print "button " + str(button_id) + " was pressed"
+        print "sending " button_id+29
         self.iface.send_keys(0, [button_id+29, 0, 0, 0, 0, 0])
 
     def on_release(self, event):
@@ -371,7 +373,7 @@ def update(application, keyboard, mouse, bluetooth, queue):
 
         return True
     except:
-        keyboard.terminate()
+        #keyboard.terminate()
         mouse.terminate()
         bluetooth.terminate()
         return False
@@ -398,7 +400,7 @@ if __name__ == "__main__":
     bluetoothProcess.start()
 
     keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    keyboardProcess.start()
+    #keyboardProcess.start()
 
     mouseProcess = multiprocessing.Process(target=create_mouse_process)
     mouseProcess.start()
