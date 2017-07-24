@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 import gtk
 from dbus.mainloop.glib import DBusGMainLoop
+import gobject
 
 import subprocess
 import multiprocessing
@@ -385,9 +386,13 @@ def create_mouse_process():
     return
 
 def create_bluetooth_server_process(queue):
-    DBusGMainLoop()
+    DBusGMainLoop(set_as_default=True)
     myservice = BluetoothService(queue)
+    gobject.timeout_add(10, dummy_callback)
     gtk.main()
+    return
+
+def dummy_callback():
     return
 
 if __name__ == "__main__":
@@ -397,10 +402,10 @@ if __name__ == "__main__":
     bluetoothProcess.start()
 
     keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    #keyboardProcess.start()
+    keyboardProcess.start()
 
     mouseProcess = multiprocessing.Process(target=create_mouse_process)
-    #mouseProcess.start()
+    mouseProcess.start()
 
     root = Tk()
     root.minsize(300, 400)
