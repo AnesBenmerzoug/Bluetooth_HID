@@ -301,18 +301,20 @@ class ConnectionStatusLabel(Label):
     def __init__(self, master, bg="red", connection_queue=None):
         Label.__init__(self, master, bg=bg)
         self.queue = connection_queue
+        self.text = "Disconnected"
         self.update_text()
 
     def update_text(self):
         try:
-            text = self.queue.get(False)
+            self.text = self.queue.get(False)
         except Empty:
-            text = "Disconnected"
-        if text is not None:
-            if text is "Connected":
-                self.configure(bg="green", text=text)
+            #text = "Disconnected"
+            pass
+        if self.text is not None:
+            if self.text is "Connected":
+                self.configure(bg="green", text=self.text)
             else:
-                self.configure(bg="red", text=text)
+                self.configure(bg="red", text=self.text)
         else:
             self.configure(bg="red", text="Disconnected")
         self.after(1000, self.update_text)
