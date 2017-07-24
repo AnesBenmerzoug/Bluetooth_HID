@@ -158,7 +158,6 @@ class BluetoothDevice():
         self.cinterrupt, cinfo = self.sinterrupt.accept()
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
-        print "Putting something into the queue"
         self.queue.put("Connected")
 
     # send a string to the bluetooth host machine
@@ -168,7 +167,6 @@ class BluetoothDevice():
         self.cinterrupt.send(message)
 
     def close(self):
-        print "Putting the last one into the queue"
         self.queue.put("Disconnected")
         self.scontrol.close()
         self.sinterrupt.close()
@@ -309,8 +307,8 @@ class ConnectionStatusLabel(Label):
     def update_text(self):
         try:
             print "Trying to get text"
-            self.text = self.queue.get(False)
-        except Empty:
+            self.text = self.queue.get(True, 0.1)
+        except:
             print "Failed to get text"
             pass
         if self.text is "Connected":
@@ -404,12 +402,10 @@ def create_mouse_process():
 
 def create_bluetooth_server_process(queue):
     try:
-        print "Creating Bluetooth Service"
         DBusGMainLoop(set_as_default=True)
         myservice = BluetoothService(queue)
         gtk.main()
     finally:
-        print "Done Creating Bluetooth Service"
         return
 
 
