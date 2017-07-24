@@ -157,7 +157,9 @@ class BluetoothDevice():
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
         global connection_status_queue
+        print "the queue is empty " + str(connection_status_queue.empty())
         connection_status_queue.put("Connected")
+        print "the queue is empty " + str(connection_status_queue.empty())
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
@@ -305,10 +307,12 @@ class ConnectionStatusLabel(Label):
         try:
             print "Trying to get text"
             global connection_status_queue
-            self.text = connection_status_queue.get(True, 0.1)
+            print "the queue is empty " + str(connection_status_queue.empty())
+            self.text = connection_status_queue.get(True, 1)
         except:
             print "Failed to get text"
             pass
+        print "text = " + self.text
         if self.text is "Connected":
             self.configure(bg="green", text="Connected")
         else:
