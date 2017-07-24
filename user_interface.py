@@ -73,11 +73,9 @@ class BluetoothDevice():
     SDP_RECORD_PATH = sys.path[0] + "/sdp_record.xml"  # file path of the sdp record to load
     UUID = "00001124-0000-1000-8000-00805f9b34fb"
 
-    def __init__(self, queue):
+    def __init__(self):
 
         print("Setting up Bluetooth device")
-
-        self.queue = queue
 
         self.init_bt_device()
         self.init_bluez_profile()
@@ -158,7 +156,8 @@ class BluetoothDevice():
         self.cinterrupt, cinfo = self.sinterrupt.accept()
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
-        self.queue.put("Connected")
+        global connection_status_queue
+        connection_status_queue.put("Connected")
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
@@ -167,7 +166,8 @@ class BluetoothDevice():
         self.cinterrupt.send(message)
 
     def close(self):
-        self.queue.put("Disconnected")
+        global connection_status_queue
+        connection_status_queue.put("Disconnected")
         self.scontrol.close()
         self.sinterrupt.close()
 
@@ -176,7 +176,7 @@ class BluetoothDevice():
 # this will enable different clients to connect to and use
 # the service
 class BluetoothService(dbus.service.Object):
-    def __init__(self, queue):
+    def __init__(self):
 
         print("Setting up service")
 
@@ -185,7 +185,7 @@ class BluetoothService(dbus.service.Object):
         dbus.service.Object.__init__(self, bus_name, "/org/upwork/HidBluetoothService")
 
         # create and setup our device
-        self.device = BluetoothDevice(queue)
+        self.device = BluetoothDevice()
 
         # start listening for connections
         self.device.listen()
@@ -240,11 +240,9 @@ class App(Frame):
     GUI Class
     """
 
-    def __init__(self, master=None, width=200, height=400, background="white", connection_queue=None):
+    def __init__(self, master=None, width=200, height=400, background="white"):
         Frame.__init__(self, master, width=width, height=height, bg=background)
         self.pack(side="top", fill=BOTH, expand=True)
-
-        self.queue = connection_queue
 
         self.buttons_frame = Frame(self, bg="grey")
         self.buttons_frame.pack(side="top", fill=X, expand=False)
@@ -265,7 +263,7 @@ class App(Frame):
         self.inner_frame.grid_rowconfigure(0, weight=1)
         self.inner_frame.grid_columnconfigure(0, weight=1)
 
-        self.pageOne = PageOne(self.inner_frame, connection_queue=self.queue)
+        self.pageOne = PageOne(self.inner_frame)
         self.pageOne.grid(row=0, column=0, sticky="nsew")
 
         self.pageTwo = PageTwo(self.inner_frame)
@@ -298,16 +296,16 @@ class BluetoothStatusLabel(Label):
 
 
 class ConnectionStatusLabel(Label):
-    def __init__(self, master, bg="red", connection_queue=None):
+    def __init__(self, master, bg="red"):
         Label.__init__(self, master, bg=bg)
-        self.queue = connection_queue
         self.text = "Disconnected"
         self.update_text()
 
     def update_text(self):
         try:
             print "Trying to get text"
-            self.text = self.queue.get(True, 0.1)
+            global connection_status_queue
+            self.text = connection_status_queue.get(True, 0.1)
         except:
             print "Failed to get text"
             pass
@@ -319,10 +317,8 @@ class ConnectionStatusLabel(Label):
 
 
 class PageOne(Frame):
-    def __init__(self, master, background="white", connection_queue=None):
+    def __init__(self, master, background="white"):
         Frame.__init__(self, master, bg=background)
-
-        self.queue = connection_queue
 
         self.bluetooth_status = StringVar()
         self.connection_status = StringVar()
@@ -410,7 +406,7 @@ def create_bluetooth_server_process(queue):
 
 
 if __name__ == "__main__":
-    connection_status_queue = multiprocessing.Queue()
+    connection_status_queue = multiprocessing.Manager().Queue()
     connection_status_queue.put("Disconnected")
 
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process, args=(connection_status_queue,))
