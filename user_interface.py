@@ -348,7 +348,7 @@ class PageTwo(Frame):
     def on_press(self, row, column):
         button_id = row * 3 + column + 1
         print "button " + str(button_id) + " was pressed"
-        print "sending " button_id+29
+        print "sending " str(button_id+29)
         self.iface.send_keys(0, [button_id+29, 0, 0, 0, 0, 0])
 
     def on_release(self, event):
