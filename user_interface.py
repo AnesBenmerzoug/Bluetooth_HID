@@ -153,9 +153,9 @@ class BluetoothDevice():
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
         global connection_status_queue
-        print("the queue is empty " + str(connection_status_queue.empty())
+        print("Is the queue is empty " + str(connection_status_queue.empty()))
         connection_status_queue.put("Connected")
-        print("the queue is empty " + str(connection_status_queue.empty())
+        print("Is the queue is empty " + str(connection_status_queue.empty()))
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
