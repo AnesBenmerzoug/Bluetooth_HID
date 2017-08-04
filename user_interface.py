@@ -221,7 +221,8 @@ class BluetoothService(dbus.service.Object):
         cmd_str += chr(0x00)
         cmd_str += chr(0x00)
 
-        print("Sending: " + cmd_str)
+        for character in cmd_str:
+            print("Sending: " + character)
 
         self.device.send_string(cmd_str)
 
