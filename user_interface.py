@@ -376,13 +376,13 @@ class PageTwo(Frame):
         shift = 29
 
         def sender(event):
-            print("button " + str(button_id) + " was pressed"
-            print("sending " + str(button_id + shift)
+            print("button " + str(button_id) + " was pressed")
+            print("sending " + str(button_id + shift))
             self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
         return sender
 
     def on_release(self, event):
-        print("button was released"
+        print("button was released")
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
