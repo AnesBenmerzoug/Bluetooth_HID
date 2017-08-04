@@ -8,6 +8,7 @@
 
 import os
 import sys
+import argparse
 import dbus
 import dbus.service
 import dbus.mainloop.glib

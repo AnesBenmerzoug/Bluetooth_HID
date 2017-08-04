@@ -388,12 +388,12 @@ class PageTwo(Frame):
 
 
 def create_keyboard_process():
-    subprocess.Popen("python keyboard_client.py", shell="True")
+    subprocess.Popen("python keyboard/keyboard_client.py", shell="True")
     return
 
 
 def create_mouse_process():
-    subprocess.Popen("python mouse_client.py", shell="True")
+    subprocess.Popen("python mouse/mouse_client.py", shell="True")
     return
 
 

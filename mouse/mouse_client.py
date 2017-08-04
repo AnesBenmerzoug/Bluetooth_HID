@@ -45,21 +45,25 @@ class Mouse():
         # keep trying to find a mouse
         have_dev = False
         count = 0
-        while have_dev is False and count < 50:
+        NUMBER_OF_TRIES = 100
+        while have_dev is False and count < NUMBER_OF_TRIES:
             try:
                 # try and get a mouse - loop through all devices and try to find a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
                     if "mouse" in device.name.lower():
+						print "Found a keyboard with the keyword 'mouse'"
+						print "device name is " + device.name
                         self.dev = InputDevice(device.fn)
                         have_dev = True
-            except:
-                print "Mouse not found, waiting 5 seconds and retrying"
-                time.sleep(5)
+                        break
+            except OSError:
+                print "Mouse not found, waiting 3 seconds and retrying"
+                time.sleep(3)
             count += 1
-
-        if count == 50:
-            print "Mouse not Found"
+        
+        if count == NUMBER_OF_TRIES:
+            print "Mouse not found after " + str(NUMBER_OF_TRIES) + " tries."
             return
         else:
             print "Mouse Found"
@@ -92,34 +96,36 @@ class Mouse():
             print "X Movement"
             self.state[3] = min(abs(event.value), 127)
             self.state[2][4] = 0 if event.value >= 0 else 1 # sign of the value
+            print "Rel X = " + str(self.state[3]) + ", " + str(self.state[2][4])            
         elif event.code == ecodes.REL_Y:
             print "Y Movement"
             self.state[4] = min(abs(event.value), 127)
             self.state[2][5] = 0 if event.value >= 0 else 1 # sign of the value
+            print "Rel Y = " + str(self.state[4]) + ", " + str(self.state[2][5]) 
         elif event.code == ecodes.REL_WHEEL:
             print "Wheel Movement"
-            self.state[5] = 1 if event.value > 0 else 31 if event.value < 0 else 0
+            self.state[5] = 0x01 if event.value > 0 else 0x1F if event.value < 0 else 0
+            print "Rel Wheel = " + str(self.state[5])
         else:
+			print "Movement Stopped"
             self.state[2][4] = 0
             self.state[2][5] = 0
-            self.state[3] = 0
-            self.state[4] = 0
-            self.state[5] = 0
+            self.state[3] = 0x00
+            self.state[4] = 0x00
+            self.state[5] = 0x00
 
 
     # poll for mouse events
     def event_loop(self):
-        try:
-            for event in self.dev.read_loop():
-                print event
-                if event.type == ecodes.EV_KEY and event.value < 2:
-                    self.change_state_button(event)
-                    self.send_input()
-                elif event.type == ecodes.EV_REL:
-                    self.change_state_movement(event)
-                    self.send_input()
-        except KeyboardInterrupt:
-            return
+        print "event loop"
+        for event in self.dev.read_loop():
+            print event
+            if event.type == ecodes.EV_KEY and event.value < 2:
+                self.change_state_button(event)
+                self.send_input()
+            elif event.type == ecodes.EV_REL:
+                self.change_state_movement(event)
+                self.send_input()
 
     # forward mouse events to the dbus service
     def send_input(self):

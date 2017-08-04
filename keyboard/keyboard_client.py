@@ -40,8 +40,6 @@ class Keyboard():
             0x00,
             0x00]
 
-        self.run = True
-
         print "Setting up DBus Client"
 
         self.bus = dbus.SystemBus()
@@ -53,21 +51,31 @@ class Keyboard():
         # keep trying to key a keyboard
         have_dev = False
         count = 0
-        while have_dev is False and count < 50:
+        NUMBER_OF_TRIES = 100
+        while have_dev is False and count < NUMBER_OF_TRIES:
             try:
                 # try and get a keyboard - loop through all devices and try to find a keyboard
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
                     if "keyboard" in device.name.lower():
+						print "Found a keyboard with the keyword 'keyboard'"
+						print "device name is " + device.name
                         self.dev = InputDevice(device.fn)
                         have_dev = True
-            except:
-                print "Keyboard not found, waiting 5 seconds and retrying"
-                time.sleep(5)
+                        break
+                    else if "gh60" in device.name.lower():
+						print "Found a keyboard with the keyword 'gh60'"
+						print "device name is " + device.name
+						self.dev = InputDevice(device.fn)
+                        have_dev = True
+                        break
+            except OSError:
+                print "Keyboard not found, waiting 3 seconds and retrying"
+                time.sleep(3)
             count += 1
-
-        if count == 50:
-            print "Keyboard not Found"
+        
+        if count == NUMBER_OF_TRIES:
+            print "Keyboard not found after " + str(NUMBER_OF_TRIES) + " tries."
             return
         else:
             print "Keyboard Found"
@@ -94,26 +102,17 @@ class Keyboard():
                     # Code 0 so we need to depress it
                     self.state[i] = 0x00
                 elif self.state[i] == 0x00 and event.value == 1:
-                    # if the current space if empty and the key is being pressed
+                    # if the current space is empty and the key is being pressed
                     self.state[i] = hex_key
                     break
-
-        print self.state[2]
-        print self.state[4:10]
-
-        if self.state[2] == 7 and 6 in self.state[4:10]:
-            self.run = False
 
     # poll for keyboard events
     def event_loop(self):
         for event in self.dev.read_loop():
-            if not self.run:
-                break
             # only bother if we hit a key and its an up or down event
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state(event)
                 self.send_input()
-        return
 
     # forward keyboard events to the dbus service
     def send_input(self):
