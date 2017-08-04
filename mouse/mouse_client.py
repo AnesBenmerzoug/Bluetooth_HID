@@ -24,7 +24,6 @@ class Mouse():
             [0,  # Button 1
              0,  # Button 2
              0,  # Button 3
-             #1,  # Button 4
              0,  # Button 4
              0,  # Button 5
              0,  # Unused
@@ -77,42 +76,29 @@ class Mouse():
         if event.code == ecodes.BTN_LEFT:
             print("Left Mouse Button Pressed")
             self.state[2][0] = event.value
-            self.state[2][1] = 0x00
-            self.state[2][2] = 0x00
         elif event.code == ecodes.BTN_RIGHT:
             print("Right Mouse Button Pressed")
-            self.state[2][0] = 0x00
             self.state[2][1] = event.value
-            self.state[2][2] = 0x00
         elif event.code == ecodes.BTN_MIDDLE:
             print("Middle Mouse Button Pressed")
-            self.state[2][0] = 0x00
-            self.state[2][1] = 0x00
             self.state[2][2] = event.value
 
     # take care of mouse movements
     def change_state_movement(self, event):
         if event.code == ecodes.REL_X:
             print("X Movement")
-            #self.state[3] = min(abs(event.value), 127)
-            #self.state[2][4] = 0 if event.value >= 0 else 1 # sign of the value
             self.state[3] = event.value & 0xFF
-            print("Rel X = " + str(self.state[3]) + ", " + str(self.state[2][4]))
+            print("Rel X = " + str(self.state[3]))
         elif event.code == ecodes.REL_Y:
             print("Y Movement")
             self.state[4] = event.value & 0xFF
-            #self.state[4] = min(abs(event.value), 127)
-            #self.state[2][5] = 0 if event.value >= 0 else 1 # sign of the value
-            print("Rel Y = " + str(self.state[4]) + ", " + str(self.state[2][5]))
+            print("Rel Y = " + str(self.state[4]))
         elif event.code == ecodes.REL_WHEEL:
             print("Wheel Movement")
             self.state[5] = event.value & 0xFF
-            #self.state[5] = 0x01 if event.value > 0 else 0x1F if event.value < 0 else 0
             print("Rel Wheel = " + str(self.state[5]))
         else:
             print("Movement Stopped")
-            #self.state[2][4] = 0
-            #self.state[2][5] = 0
             self.state[3] = 0x00
             self.state[4] = 0x00
             self.state[5] = 0x00
