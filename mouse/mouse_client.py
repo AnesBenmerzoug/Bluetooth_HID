@@ -24,7 +24,8 @@ class Mouse():
             [0,  # Button 1
              0,  # Button 2
              0,  # Button 3
-             1,  # Button 4
+             #1,  # Button 4
+             0,  # Button 4
              0,  # Button 5
              0,  # Unused
              0,  # Unused
