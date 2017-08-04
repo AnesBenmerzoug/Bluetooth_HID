@@ -40,13 +40,13 @@ class Keyboard():
             0x00,
             0x00]
 
-        print "Setting up DBus Client"
+        print("Setting up DBus Client")
 
         self.bus = dbus.SystemBus()
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
         self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
 
-        print "Waiting for keyboard"
+        print("Waiting for keyboard")
 
         # keep trying to key a keyboard
         have_dev = False
@@ -58,28 +58,28 @@ class Keyboard():
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
                     if "keyboard" in device.name.lower():
-                        print "Found a keyboard with the keyword 'keyboard'"
-                        print "device name is " + device.name
+                        print("Found a keyboard with the keyword 'keyboard'")
+                        print("device name is " + device.name)
                         self.dev = InputDevice(device.fn)
                         have_dev = True
                         break
                     elif "gh60" in device.name.lower():
-                        print "Found a keyboard with the keyword 'gh60'"
-                        print "device name is " + device.name
+                        print("Found a keyboard with the keyword 'gh60'")
+                        print("device name is " + device.name)
                         self.dev = InputDevice(device.fn)
                         have_dev = True
                         break
             except OSError:
-                print "Keyboard not found, waiting 3 seconds and retrying"
+                print("Keyboard not found, waiting 3 seconds and retrying")
                 time.sleep(3)
             count += 1
 
-        if count == NUMBER_OF_TRIES:
-            print "Keyboard not found after " + str(NUMBER_OF_TRIES) + " tries."
+        if not have_dev:
+            print("Keyboard not found after " + str(NUMBER_OF_TRIES) + " tries")
             return
         else:
-            print "Keyboard Found"
-            print "Starting keyboard event loop"
+            print("Keyboard Found")
+            print("Starting keyboard event loop")
             self.event_loop()
 
     def change_state(self, event):
@@ -116,15 +116,16 @@ class Keyboard():
 
     # forward keyboard events to the dbus service
     def send_input(self):
-
         bin_str = ""
         element = self.state[2]
         for bit in element:
             bin_str += str(bit)
-
-        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
+        try:
+            self.iface.send_keys(int(bin_str, 2), self.state[4:10])
+        except:
+            return
 
 
 if __name__ == "__main__":
-    print "Setting up keyboard"
+    print("Setting up keyboard")
     kb = Keyboard()

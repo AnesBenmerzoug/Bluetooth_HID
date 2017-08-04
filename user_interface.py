@@ -11,8 +11,6 @@ import gtk
 from dbus.mainloop.glib import DBusGMainLoop
 import gobject
 
-from Queue import Empty
-
 import subprocess
 import multiprocessing
 
@@ -155,9 +153,9 @@ class BluetoothDevice():
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
         global connection_status_queue
-        print "the queue is empty " + str(connection_status_queue.empty())
+        print("the queue is empty " + str(connection_status_queue.empty())
         connection_status_queue.put("Connected")
-        print "the queue is empty " + str(connection_status_queue.empty())
+        print("the queue is empty " + str(connection_status_queue.empty())
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
@@ -223,6 +221,8 @@ class BluetoothService(dbus.service.Object):
         cmd_str += chr(0x00)
         cmd_str += chr(0x00)
 
+        print("Sending: " + cmd_str)
+
         self.device.send_string(cmd_str)
 
     @dbus.service.method('org.freedesktop.DBus.Introspectable', out_signature='s')
@@ -279,7 +279,6 @@ class App(Frame):
             self.pageOne.tkraise()
         elif index == 1:
             self.pageTwo.tkraise()
-        print index
 
 #############################################################################################################
 
@@ -377,13 +376,13 @@ class PageTwo(Frame):
         shift = 29
 
         def sender(event):
-            print "button " + str(button_id) + " was pressed"
-            print "sending " + str(button_id + shift)
+            print("button " + str(button_id) + " was pressed"
+            print("sending " + str(button_id + shift)
             self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
         return sender
 
     def on_release(self, event):
-        print "button was released"
+        print("button was released"
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
@@ -425,12 +424,12 @@ if __name__ == "__main__":
     main_application = App(root)
 
     try:
-        print "Starting user interface main loop"
+        print("Starting user interface main loop")
         main_application.mainloop()
     finally:
-        print "Exiting user interface main loop"
+        print("Exiting user interface main loop")
         keyboardProcess.terminate()
         mouseProcess.terminate()
         bluetoothProcess.terminate()
 
-    print "Closing Application"
+    print("Closing Application")
