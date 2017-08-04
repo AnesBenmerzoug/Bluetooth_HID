@@ -58,22 +58,22 @@ class Keyboard():
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
                     if "keyboard" in device.name.lower():
-						print "Found a keyboard with the keyword 'keyboard'"
-						print "device name is " + device.name
+                        print "Found a keyboard with the keyword 'keyboard'"
+                        print "device name is " + device.name
                         self.dev = InputDevice(device.fn)
                         have_dev = True
                         break
-                    else if "gh60" in device.name.lower():
-						print "Found a keyboard with the keyword 'gh60'"
-						print "device name is " + device.name
-						self.dev = InputDevice(device.fn)
+                    elif "gh60" in device.name.lower():
+                        print "Found a keyboard with the keyword 'gh60'"
+                        print "device name is " + device.name
+                        self.dev = InputDevice(device.fn)
                         have_dev = True
                         break
             except OSError:
                 print "Keyboard not found, waiting 3 seconds and retrying"
                 time.sleep(3)
             count += 1
-        
+
         if count == NUMBER_OF_TRIES:
             print "Keyboard not found after " + str(NUMBER_OF_TRIES) + " tries."
             return

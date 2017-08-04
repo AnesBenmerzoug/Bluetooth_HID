@@ -400,7 +400,7 @@ def create_mouse_process():
 def create_bluetooth_server_process():
     try:
         DBusGMainLoop(set_as_default=True)
-        myservice = BluetoothService()
+        BluetoothService()
         gtk.main()
     finally:
         return

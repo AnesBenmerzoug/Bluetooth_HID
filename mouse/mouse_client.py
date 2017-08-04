@@ -52,8 +52,8 @@ class Mouse():
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
                 for device in devices:
                     if "mouse" in device.name.lower():
-						print "Found a keyboard with the keyword 'mouse'"
-						print "device name is " + device.name
+                        print "Found a keyboard with the keyword 'mouse'"
+                        print "device name is " + device.name
                         self.dev = InputDevice(device.fn)
                         have_dev = True
                         break
@@ -107,7 +107,7 @@ class Mouse():
             self.state[5] = 0x01 if event.value > 0 else 0x1F if event.value < 0 else 0
             print "Rel Wheel = " + str(self.state[5])
         else:
-			print "Movement Stopped"
+            print "Movement Stopped"
             self.state[2][4] = 0
             self.state[2][5] = 0
             self.state[3] = 0x00
