@@ -96,7 +96,7 @@ class BluetoothDevice():
 
         print("Configuring Bluez Profile")
 
-        # read service record
+        # read service record from a file
         print("Reading service record")
 
         with open(BluetoothDevice.SDP_RECORD_PATH, "r") as fh:
@@ -104,8 +104,6 @@ class BluetoothDevice():
 
         if not service_record:
             sys.exit("Could not open the sdp record. Exiting...")
-
-        service_record = self.read_sdp_service_record()
 
         # setup profile options
         opts = {
@@ -124,19 +122,6 @@ class BluetoothDevice():
         manager.RegisterProfile(BluetoothDevice.PROFILE_DBUS_PATH, BluetoothDevice.UUID, opts)
 
         print("Profile registered ")
-
-    # read and return an sdp record from a file
-    def read_sdp_service_record(self):
-
-        print("Reading service record")
-
-        with open(BluetoothDevice.SDP_RECORD_PATH, "r") as fh:
-            service_record = fh.read()
-
-        if not service_record:
-            sys.exit("Could not open the sdp record. Exiting...")
-
-        return service_record
 
     # listen for incoming client connections
 
