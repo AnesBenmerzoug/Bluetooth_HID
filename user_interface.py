@@ -9,10 +9,10 @@ import xml.etree.ElementTree as ET
 
 import gtk
 from dbus.mainloop.glib import DBusGMainLoop
-import gobject
 
 import subprocess
 import multiprocessing
+
 
 #####################################################################################################
 
@@ -84,7 +84,7 @@ class BluetoothDevice():
         print("Configuring for name " + BluetoothDevice.MY_DEV_NAME)
 
         # set the device class to a keybord/mouse combo and set the name
-        #os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
+        # os.system("sudo hciconfig hcio class 0x25C0") # Keyboard/Mouse Combo in Limited Discoverable Mode
         os.system("sudo hciconfig hcio class 0x05C0")  # Keyboard/Mouse Combo in General Discoverable Mode
         os.system("sudo hciconfig hcio name " + BluetoothDevice.MY_DEV_NAME)
 
@@ -96,9 +96,18 @@ class BluetoothDevice():
 
         print("Configuring Bluez Profile")
 
-        # setup profile options
+        # read service record
+        print("Reading service record")
+
+        with open(BluetoothDevice.SDP_RECORD_PATH, "r") as fh:
+            service_record = fh.read()
+
+        if not service_record:
+            sys.exit("Could not open the sdp record. Exiting...")
+
         service_record = self.read_sdp_service_record()
 
+        # setup profile options
         opts = {
             "ServiceRecord": service_record,
             "Role": "server",
@@ -121,12 +130,13 @@ class BluetoothDevice():
 
         print("Reading service record")
 
-        try:
-            fh = open(BluetoothDevice.SDP_RECORD_PATH, "r")
-        except:
+        with open(BluetoothDevice.SDP_RECORD_PATH, "r") as fh:
+            service_record = fh.read()
+
+        if not service_record:
             sys.exit("Could not open the sdp record. Exiting...")
 
-        return fh.read()
+        return service_record
 
     # listen for incoming client connections
 
@@ -218,14 +228,13 @@ class BluetoothService(dbus.service.Object):
         cmd_str += chr(rel_move[0])
         cmd_str += chr(rel_move[1])
         cmd_str += chr(rel_move[2])
-        #cmd_str += chr(0x00)
-        #cmd_str += chr(0x00)
 
         self.device.send_string(cmd_str)
 
     @dbus.service.method('org.freedesktop.DBus.Introspectable', out_signature='s')
     def Introspect(self):
-        return ET.tostring(ET.parse(os.getcwd()+'/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8', method='xml')
+        return ET.tostring(ET.parse(os.getcwd() + '/org.upwork.hidbluetooth.introspection').getroot(), encoding='utf8',
+                           method='xml')
 
     def close(self):
         try:
@@ -233,7 +242,9 @@ class BluetoothService(dbus.service.Object):
         except:
             pass
 
+
 #####################################################################################################
+
 
 class App(Frame):
     """
@@ -277,6 +288,7 @@ class App(Frame):
             self.pageOne.tkraise()
         elif index == 1:
             self.pageTwo.tkraise()
+
 
 #############################################################################################################
 
@@ -330,10 +342,10 @@ class PageOne(Frame):
         Label(self.frame1, text="Bluetooth Status: ", bg=background).pack(side=LEFT, padx=(10, 20), pady=10)
 
         BluetoothStatusLabel(self.frame1, bg="red").pack(fill=X,
-                                                        expand=True,
-                                                        side=LEFT,
-                                                        padx=10,
-                                                        pady=10)
+                                                         expand=True,
+                                                         side=LEFT,
+                                                         padx=10,
+                                                         pady=10)
 
         self.frame2 = Frame(self, bg=background)
         self.frame2.pack(side="top", fill="both", expand=True)
@@ -345,6 +357,7 @@ class PageOne(Frame):
                                                           side=LEFT,
                                                           padx=10,
                                                           pady=10)
+
 
 ##########################################################################################################################
 
@@ -360,10 +373,10 @@ class PageTwo(Frame):
 
         for i in xrange(3):
             for j in xrange(3):
-                self.buttons.append(Button(self.container, text=str(i*3+j+1)))
-                self.buttons[i*3+j].bind("<ButtonPress-1>", self.on_press(i, j))
-                self.buttons[i*3+j].bind("<ButtonRelease-1>", self.on_release)
-                self.buttons[i*3+j].grid(row=i, column=j, padx=20, pady=20)
+                self.buttons.append(Button(self.container, text=str(i * 3 + j + 1)))
+                self.buttons[i * 3 + j].bind("<ButtonPress-1>", self.on_press(i, j))
+                self.buttons[i * 3 + j].bind("<ButtonRelease-1>", self.on_release)
+                self.buttons[i * 3 + j].grid(row=i, column=j, padx=20, pady=20)
 
         self.bus = dbus.SystemBus()
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
@@ -375,8 +388,8 @@ class PageTwo(Frame):
 
         def sender(event):
             print("button " + str(button_id) + " was pressed")
-            print("sending " + str(button_id + shift))
             self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
+
         return sender
 
     def on_release(self, event):

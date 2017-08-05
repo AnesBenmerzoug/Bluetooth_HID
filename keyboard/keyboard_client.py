@@ -16,7 +16,7 @@ import keymap  # used to map evdev input to hide key codes
 
 
 # Define a client to listen to local key events
-class Keyboard():
+class Keyboard:
     def __init__(self):
         # the structure for a bluetooth keyboard input report (size is 10 bytes)
 
@@ -128,4 +128,4 @@ class Keyboard():
 
 if __name__ == "__main__":
     print("Setting up keyboard")
-    kb = Keyboard()
+    Keyboard()

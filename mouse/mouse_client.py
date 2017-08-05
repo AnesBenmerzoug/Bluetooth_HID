@@ -13,22 +13,14 @@ from evdev import InputDevice, ecodes
 
 
 # define a client to listen to local mouse events
-class Mouse():
+class Mouse:
     def __init__(self):
         # the structure for a bluetooth mouse input report (size is 6 bytes)
 
         self.state = [
             0xA1,  # this is an input report
             0x02,  # Usage report = Mouse
-            # Bit array for Button
-            [0,  # Button 1
-             0,  # Button 2
-             0,  # Button 3
-             0,  # Button 4
-             0,  # Button 5
-             0,  # Unused
-             0,  # Unused
-             0],  # Unused
+            0x00,  # Bit array for Buttons ( Bits 0...4 : Buttons 1...5, Bits 5...7 : Unused )
             0x00,  # Rel X
             0x00,  # Rel Y
             0x00,  # Mouse Wheel
@@ -72,43 +64,27 @@ class Mouse():
 
     # take care of mouse buttons
     def change_state_button(self, event):
-        print(event.code)
         if event.code == ecodes.BTN_LEFT:
             print("Left Mouse Button Pressed")
-            self.state[2][0] = event.value
-            self.state[2][1] = 0x00
-            self.state[2][2] = 0x00
+            self.state[2] = 0x01 if event.value == 1 else 0x00
         elif event.code == ecodes.BTN_RIGHT:
             print("Right Mouse Button Pressed")
-            self.state[2][0] = 0x00
-            self.state[2][1] = event.value
-            self.state[2][2] = 0x00
+            self.state[2] = 0x02 if event.value == 1 else 0x00
         elif event.code == ecodes.BTN_MIDDLE:
             print("Middle Mouse Button Pressed")
-            self.state[2][0] = 0x00
-            self.state[2][1] = 0x00
-            self.state[2][2] = event.value
+            self.state[2] = 0x03 if event.value == 1 else 0x00
 
     # take care of mouse movements
     def change_state_movement(self, event):
         if event.code == ecodes.REL_X:
             print("X Movement")
             self.state[3] = event.value & 0xFF
-            print("Rel X = " + str(self.state[3]))
         elif event.code == ecodes.REL_Y:
             print("Y Movement")
             self.state[4] = event.value & 0xFF
-            print("Rel Y = " + str(self.state[4]))
         elif event.code == ecodes.REL_WHEEL:
             print("Wheel Movement")
             self.state[5] = event.value & 0xFF
-            print("Rel Wheel = " + str(self.state[5]))
-        else:
-            print("Movement Stopped")
-            self.state[3] = 0x00
-            self.state[4] = 0x00
-            self.state[5] = 0x00
-
 
     # poll for mouse events
     def event_loop(self):
@@ -117,23 +93,17 @@ class Mouse():
             print(event)
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state_button(event)
-                self.send_input()
             elif event.type == ecodes.EV_REL:
                 self.change_state_movement(event)
-                self.send_input()
+            self.send_input()
 
     # forward mouse events to the dbus service
     def send_input(self):
-
-        bin_str = ""
-        element = self.state[2]
-        for bit in element:
-            bin_str += str(bit)
         try:
-            self.iface.send_mouse(int(bin_str, 2), self.state[3:6])
+            self.iface.send_mouse(self.state[2], self.state[3:6])
         except:
             return
 
 if __name__ == "__main__":
     print("Setting up mouse")
-    mouse = Mouse()
+    Mouse()
