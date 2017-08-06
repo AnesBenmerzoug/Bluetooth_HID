@@ -148,9 +148,7 @@ class BluetoothDevice():
         print("Got a connection on the interrupt channel from " + cinfo[0])
 
         global connection_status_queue
-        print("Is the queue is empty " + str(connection_status_queue.empty()))
         connection_status_queue.put("Connected")
-        print("Is the queue is empty " + str(connection_status_queue.empty()))
 
     # send a string to the bluetooth host machine
     def send_string(self, message):
@@ -187,7 +185,7 @@ class BluetoothService(dbus.service.Object):
 
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
-        print("Received Keyboard Input, sending it via Bluetooth")
+
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x01)
@@ -205,7 +203,6 @@ class BluetoothService(dbus.service.Object):
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='iai')
     def send_mouse(self, buttons, rel_move):
 
-        print("Received Mouse Input, sending it via Bluetooth")
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x02)

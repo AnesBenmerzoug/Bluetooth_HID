@@ -122,7 +122,7 @@ class Keyboard:
             bin_str += str(bit)
         try:
             self.iface.send_keys(int(bin_str, 2), self.state[4:10])
-        except:
+        finally:
             return
 
 

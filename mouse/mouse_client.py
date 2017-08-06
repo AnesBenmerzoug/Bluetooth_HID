@@ -66,13 +66,16 @@ class Mouse:
     def change_state_button(self, event):
         if event.code == ecodes.BTN_LEFT:
             print("Left Mouse Button Pressed")
-            self.state[2] = 0x01 if event.value == 1 else 0x00
+            self.state[2] = event.value
         elif event.code == ecodes.BTN_RIGHT:
             print("Right Mouse Button Pressed")
-            self.state[2] = 0x02 if event.value == 1 else 0x00
+            self.state[2] = 2 * event.value
         elif event.code == ecodes.BTN_MIDDLE:
             print("Middle Mouse Button Pressed")
-            self.state[2] = 0x03 if event.value == 1 else 0x00
+            self.state[2] = 3 * event.value
+        self.state[3] = 0x00
+        self.state[4] = 0x00
+        self.state[5] = 0x00
 
     # take care of mouse movements
     def change_state_movement(self, event):
@@ -88,9 +91,7 @@ class Mouse:
 
     # poll for mouse events
     def event_loop(self):
-        print("event loop")
         for event in self.dev.read_loop():
-            print(event)
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state_button(event)
             elif event.type == ecodes.EV_REL:
@@ -101,7 +102,7 @@ class Mouse:
     def send_input(self):
         try:
             self.iface.send_mouse(self.state[2], self.state[3:6])
-        except:
+        finally:
             return
 
 if __name__ == "__main__":
