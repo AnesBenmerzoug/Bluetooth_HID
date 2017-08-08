@@ -112,7 +112,11 @@ class Keyboard:
             # only bother if we hit a key and its an up or down event
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state(event)
-                self.send_input()
+                try:
+                    self.send_input()
+                except:
+                    print("Couldn't send keystroke")
+                    return
 
     # forward keyboard events to the dbus service
     def send_input(self):
@@ -120,10 +124,7 @@ class Keyboard:
         element = self.state[2]
         for bit in element:
             bin_str += str(bit)
-        try:
-            self.iface.send_keys(int(bin_str, 2), self.state[4:10])
-        finally:
-            return
+        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
 
 
 if __name__ == "__main__":
