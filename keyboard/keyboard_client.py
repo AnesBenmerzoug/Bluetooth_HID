@@ -96,6 +96,7 @@ class Keyboard:
 
             # Get the keycode of the key
             hex_key = keymap.convert(ecodes.KEY[event.code])
+            print("Key " + str(ecodes.KEY[event.code]) + " was pressed")
             # Loop through elements 4 to 9 of the input report structure
             for i in range(4, 10):
                 if self.state[i] == hex_key and event.value == 0:
