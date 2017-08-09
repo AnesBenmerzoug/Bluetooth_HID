@@ -96,15 +96,12 @@ class Device:
                 return
             elif have_keyboard and have_mouse:
                 print("Keyboard and Mouse Found")
-                print("Starting Combined event loop")
                 self.combined_event_loop()
             elif have_keyboard:
                 print("Keyboard Found")
-                print("Starting Keyboard event loop")
                 self.keyboard_event_loop()
             else:
                 print("Mouse Found")
-                print("Starting Mouse event loop")
                 self.combined_event_loop()
                 # take care of mouse buttons
 
@@ -205,6 +202,7 @@ class Device:
     # poll for keyboard and mouse events
     def combined_event_loop(self):
         print("Starting combined event loop")
+        print(self.mouse.fd)
         devices = {self.keyboard.fd if self.keyboard is not None else -1: self.keyboard,
                    self.mouse.fd if self.mouse is not None else -1: self.mouse}
         while True:
