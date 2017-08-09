@@ -63,11 +63,7 @@ class Device:
         count = 0
         NUMBER_OF_TRIES = 100
 
-        while True:
-            if have_keyboard and have_mouse:
-                break
-            if count >= NUMBER_OF_TRIES:
-                break
+        while not (have_keyboard and have_mouse) and count < NUMBER_OF_TRIES:
             try:
                 # loop through all devices and try and get a keyboard and/or a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -95,22 +91,22 @@ class Device:
             finally:
                 count += 1
 
-            print(count)
-            print(have_mouse)
-            print(have_keyboard)
+        print(count)
+        print(have_mouse)
+        print(have_keyboard)
 
-            if not (have_keyboard or have_mouse):
-                print("No devices were found.")
-                return
+        if not (have_keyboard or have_mouse):
+            print("No devices were found.")
+            return
+        else:
+            if have_keyboard and have_mouse:
+                print("Keyboard and Mouse found")
+            elif have_keyboard:
+                print("Keyboard found")
             else:
-                if have_keyboard and have_mouse:
-                    print("Keyboard and Mouse found")
-                elif have_keyboard:
-                    print("Keyboard found")
-                else:
-                    print("Mouse found")
-                print("Starting event loop")
-                self.combined_event_loop()
+                print("Mouse found")
+            print("Starting event loop")
+            self.combined_event_loop()
 
     ####################################################################################################################
 
