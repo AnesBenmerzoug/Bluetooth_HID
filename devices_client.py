@@ -133,6 +133,7 @@ class Device:
 
     # poll for mouse events
     def mouse_event_loop(self):
+        print("Starting Mouse event loop")
         for event in self.mouse.read_loop():
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state_button(event)
@@ -177,6 +178,7 @@ class Device:
 
     # poll for keyboard events
     def keyboard_event_loop(self):
+        print("Starting Keyboard event loop")
         for event in self.keyboard.read_loop():
             # only bother if we hit a key and its an up or down event
             if event.type == ecodes.EV_KEY and event.value < 2:
@@ -199,6 +201,7 @@ class Device:
 
     # poll for keyboard and mouse events
     def combined_event_loop(self):
+        print("Starting combined event loop")
         devices = [self.keyboard, self.mouse]
         while True:
             r, w, e = select(devices, [], [])

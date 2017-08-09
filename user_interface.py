@@ -374,13 +374,22 @@ class PageTwo(Frame):
 
         def sender(event):
             print("button " + str(button_id) + " was pressed")
-            self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
+            try:
+                self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
+            except dbus.DBusException as e:
+                print("Couldn't send number")
+                print(e)
+                return
 
         return sender
 
     def on_release(self, event):
         print("button was released")
-        self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        try:
+            self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        except dbus.DBusException as e:
+            print(e)
+            return
 
 
 def create_devices_process():
