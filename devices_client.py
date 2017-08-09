@@ -63,7 +63,7 @@ class Device:
         count = 0
         NUMBER_OF_TRIES = 100
 
-        while (not (have_keyboard and have_mouse)) and count < NUMBER_OF_TRIES:
+        while (not have_keyboard or not have_mouse) and count < NUMBER_OF_TRIES:
             try:
                 # loop through all devices and try and get a keyboard and/or a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -88,7 +88,8 @@ class Device:
             except OSError:
                 print("Keyboard and/or Mouse not found, waiting 3 seconds and retrying")
                 time.sleep(3)
-            count += 1
+            finally:
+                count += 1
 
             print(count)
 
