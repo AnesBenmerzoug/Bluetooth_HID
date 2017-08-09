@@ -92,6 +92,8 @@ class Device:
                 count += 1
 
             print(count)
+            print(have_mouse)
+            print(have_keyboard)
 
             if not (have_keyboard or have_mouse):
                 print("No devices were found.")
