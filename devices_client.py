@@ -143,7 +143,7 @@ class Device:
                 self.send_mouse_input()
             except:
                 print("Couldn't send mouse movement/button press")
-                return
+                break
 
     # forward mouse events to the dbus service
     def send_mouse_input(self):
@@ -187,7 +187,7 @@ class Device:
                     self.send_keyboard_input()
                 except:
                     print("Couldn't send keystroke")
-                    return
+                    break
 
     # forward keyboard events to the dbus service
     def send_keyboard_input(self):
