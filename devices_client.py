@@ -202,9 +202,7 @@ class Device:
     # poll for keyboard and mouse events
     def combined_event_loop(self):
         print("Starting combined event loop")
-        print(self.mouse.fd)
-        devices = {self.keyboard.fd if self.keyboard is not None else -1: self.keyboard,
-                   self.mouse.fd if self.mouse is not None else -1: self.mouse}
+        devices = {dev.fd: dev for dev in [self.keyboard, self.mouse] if dev is not None}
         while True:
             r, w, e = select(devices, [], [])
             for fd in r:
