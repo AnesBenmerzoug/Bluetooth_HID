@@ -90,6 +90,8 @@ class Device:
                 time.sleep(3)
             count += 1
 
+            print(count)
+
             if not (have_keyboard or have_mouse):
                 print("No devices were found.")
                 return
