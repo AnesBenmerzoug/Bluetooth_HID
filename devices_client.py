@@ -123,6 +123,7 @@ class Device:
 
     # take care of mouse movements
     def change_state_movement(self, event):
+        print("Mouse Movement")
         if event.code == ecodes.REL_X:
             self.mouse_state[3] = event.value & 0xFF
         elif event.code == ecodes.REL_Y:
@@ -181,7 +182,6 @@ class Device:
                 print(fd)
                 print(devices[fd])
                 if devices[fd] == self.keyboard:
-                    print("Keyboard events")
                     for event in self.keyboard.read():
                         # only bother if we hit a key and its an up or down event
                         if event.type == ecodes.EV_KEY and event.value < 2:
@@ -189,10 +189,9 @@ class Device:
                             try:
                                 self.send_keyboard_input()
                             except:
-                                pass
+                                break
 
                 else:
-                    print("Mouse events")
                     for event in self.mouse.read():
                         if event.type == ecodes.EV_KEY and event.value < 2:
                             self.change_state_button(event)
@@ -201,7 +200,7 @@ class Device:
                         try:
                             self.send_mouse_input()
                         except :
-                            pass
+                            break
 
 ########################################################################################################################
 

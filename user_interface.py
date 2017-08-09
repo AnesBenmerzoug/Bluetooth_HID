@@ -188,7 +188,7 @@ class BluetoothService(dbus.service.Object):
 
         print("Sending keyboard keystrokes:")
         for key_code in keys:
-            print(str(key_code))
+            print(key_code)
 
         cmd_str = ""
         cmd_str += chr(0xA1)
