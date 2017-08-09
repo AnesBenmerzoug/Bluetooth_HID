@@ -63,7 +63,7 @@ class Device:
         count = 0
         NUMBER_OF_TRIES = 100
 
-        while not (have_keyboard and have_mouse) and count < NUMBER_OF_TRIES:
+        while (not (have_keyboard and have_mouse)) and count < NUMBER_OF_TRIES:
             try:
                 # loop through all devices and try and get a keyboard and/or a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -93,14 +93,14 @@ class Device:
             if not (have_keyboard or have_mouse):
                 print("No devices were found.")
                 return
-            elif have_keyboard and have_mouse:
-                print("Keyboard and Mouse Found")
-                self.combined_event_loop()
-            elif have_keyboard:
-                print("Keyboard Found")
-                #self.keyboard_event_loop()
             else:
-                print("Mouse Found")
+                if have_keyboard and have_mouse:
+                    print("Keyboard and Mouse found")
+                elif have_keyboard:
+                    print("Keyboard found")
+                else:
+                    print("Mouse found")
+                print("Starting event loop")
                 self.combined_event_loop()
 
     ####################################################################################################################
@@ -128,20 +128,6 @@ class Device:
             self.mouse_state[4] = event.value & 0xFF
         elif event.code == ecodes.REL_WHEEL:
             self.mouse_state[5] = event.value & 0xFF
-
-    # poll for mouse events
-    def mouse_event_loop(self):
-        print("Starting Mouse event loop")
-        for event in self.mouse.read_loop():
-            if event.type == ecodes.EV_KEY and event.value < 2:
-                self.change_state_button(event)
-            elif event.type == ecodes.EV_REL:
-                self.change_state_movement(event)
-            try:
-                self.send_mouse_input()
-            except:
-                print("Couldn't send mouse movement/button press")
-                break
 
     # forward mouse events to the dbus service
     def send_mouse_input(self):
@@ -172,19 +158,6 @@ class Device:
                 elif self.keyboard_state[i] == 0x00 and event.value == 1:
                     # if the current space is empty and the key is being pressed
                     self.keyboard_state[i] = hex_key
-                    break
-
-    # poll for keyboard events
-    def keyboard_event_loop(self):
-        print("Starting Keyboard event loop")
-        for event in self.keyboard.read_loop():
-            # only bother if we hit a key and its an up or down event
-            if event.type == ecodes.EV_KEY and event.value < 2:
-                self.change_keyboard_state(event)
-                try:
-                    self.send_keyboard_input()
-                except:
-                    print("Couldn't send keystroke")
                     break
 
     # forward keyboard events to the dbus service
