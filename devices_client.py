@@ -206,6 +206,8 @@ class Device:
         while True:
             r, w, e = select(devices, [], [])
             for fd in r:
+                print(fd)
+                print(devices[fd])
                 if devices[fd] == self.keyboard:
                     for event in self.keyboard.read():
                         # only bother if we hit a key and its an up or down event
