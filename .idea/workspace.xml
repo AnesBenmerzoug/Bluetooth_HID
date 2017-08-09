@@ -20,8 +20,8 @@
       <file leaf-file-name="user_interface.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/user_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="391" column="18" lean-forward="false" selection-start-line="391" selection-start-column="18" selection-end-line="391" selection-end-column="18" />
+            <state relative-caret-position="399">
+              <caret line="197" column="0" lean-forward="true" selection-start-line="197" selection-start-column="0" selection-end-line="197" selection-end-column="0" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -44,8 +44,8 @@
       <file leaf-file-name="mouse_client.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="586">
-              <caret line="106" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="108" selection-end-column="11" />
+            <state relative-caret-position="93">
+              <caret line="68" column="39" lean-forward="true" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
               <folding>
                 <element signature="e#101#112#0" expanded="true" />
               </folding>
@@ -56,8 +56,8 @@
       <file leaf-file-name="devices_client.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/devices_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="187" column="22" lean-forward="true" selection-start-line="187" selection-start-column="22" selection-end-line="187" selection-end-column="22" />
+            <state relative-caret-position="132">
+              <caret line="100" column="31" lean-forward="false" selection-start-line="100" selection-start-column="31" selection-end-line="100" selection-end-column="31" />
               <folding>
                 <element signature="e#118#129#0" expanded="true" />
               </folding>
@@ -89,6 +89,7 @@
       <find>print</find>
       <find>&quot;</find>
       <find>self.state</find>
+      <find>Starting Mouse</find>
     </findStrings>
     <replaceStrings>
       <replace>print(</replace>
@@ -830,30 +831,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="586">
-          <caret line="106" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="108" selection-end-column="11" />
-          <folding>
-            <element signature="e#101#112#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/user_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="391" column="18" lean-forward="false" selection-start-line="391" selection-start-column="18" selection-end-line="391" selection-end-column="18" />
+        <state relative-caret-position="399">
+          <caret line="197" column="0" lean-forward="true" selection-start-line="197" selection-start-column="0" selection-end-line="197" selection-end-column="0" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="68" column="39" lean-forward="true" selection-start-line="68" selection-start-column="39" selection-end-line="68" selection-end-column="39" />
+          <folding>
+            <element signature="e#101#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/devices_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="187" column="22" lean-forward="true" selection-start-line="187" selection-start-column="22" selection-end-line="187" selection-end-column="22" />
+        <state relative-caret-position="132">
+          <caret line="100" column="31" lean-forward="false" selection-start-line="100" selection-start-column="31" selection-end-line="100" selection-end-column="31" />
           <folding>
             <element signature="e#118#129#0" expanded="true" />
           </folding>

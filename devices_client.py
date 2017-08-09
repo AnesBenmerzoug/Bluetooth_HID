@@ -55,6 +55,9 @@ class Device:
         print("Waiting for keyboard and mouse")
 
         # keep trying to find a keyboard and/or a mouse
+        self.keyboard = None
+        self.mouse = None
+
         have_keyboard = False
         have_mouse = False
         count = 0
@@ -102,7 +105,7 @@ class Device:
             else:
                 print("Mouse Found")
                 print("Starting Mouse event loop")
-                self.mouse_event_loop()
+                self.combined_event_loop()
                 # take care of mouse buttons
 
     ####################################################################################################################
