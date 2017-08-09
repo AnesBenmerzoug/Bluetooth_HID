@@ -91,10 +91,6 @@ class Device:
             finally:
                 count += 1
 
-        print(count)
-        print(have_mouse)
-        print(have_keyboard)
-
         if not (have_keyboard or have_mouse):
             print("No devices were found.")
             return
@@ -185,6 +181,7 @@ class Device:
                 print(fd)
                 print(devices[fd])
                 if devices[fd] == self.keyboard:
+                    print("Keyboard events")
                     for event in self.keyboard.read():
                         # only bother if we hit a key and its an up or down event
                         if event.type == ecodes.EV_KEY and event.value < 2:
@@ -195,6 +192,7 @@ class Device:
                                 pass
 
                 else:
+                    print("Mouse events")
                     for event in self.mouse.read():
                         if event.type == ecodes.EV_KEY and event.value < 2:
                             self.change_state_button(event)
