@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="471fad49-ebae-4645-9df6-fcfc776737b5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mouse/mouse_client.py" afterPath="$PROJECT_DIR$/mouse/mouse_client.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user_interface.py" afterPath="$PROJECT_DIR$/user_interface.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,11 +17,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="user_interface.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="user_interface.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="190" column="32" lean-forward="true" selection-start-line="190" selection-start-column="32" selection-end-line="190" selection-end-column="32" />
+            <state relative-caret-position="807">
+              <caret line="406" column="66" lean-forward="false" selection-start-line="406" selection-start-column="66" selection-end-line="406" selection-end-column="66" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -54,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="devices_client.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="devices_client.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/devices_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="223" column="12" lean-forward="false" selection-start-line="223" selection-start-column="12" selection-end-line="223" selection-end-column="12" />
+            <state relative-caret-position="255">
+              <caret line="196" column="0" lean-forward="true" selection-start-line="196" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
               <folding>
                 <element signature="e#118#129#0" expanded="true" />
               </folding>
@@ -110,10 +109,10 @@
         <option value="$PROJECT_DIR$/bluetooth_daemon_configuration.sh" />
         <option value="$PROJECT_DIR$/sdp_record.xml" />
         <option value="$PROJECT_DIR$/keyboard/keyboard_client.py" />
-        <option value="$PROJECT_DIR$/user_interface.py" />
         <option value="$PROJECT_DIR$/mouse/mouse_client.py" />
         <option value="$PROJECT_DIR$/.idea/devices_client.py" />
         <option value="$PROJECT_DIR$/devices_client.py" />
+        <option value="$PROJECT_DIR$/user_interface.py" />
       </list>
     </option>
   </component>
@@ -800,7 +799,7 @@
         <state relative-caret-position="476">
           <caret line="28" column="23" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="431" selection-end-column="0" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -810,16 +809,6 @@
         <state relative-caret-position="-1301">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user_interface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="190" column="32" lean-forward="true" selection-start-line="190" selection-start-column="32" selection-end-line="190" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -853,10 +842,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/devices_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="223" column="12" lean-forward="false" selection-start-line="223" selection-start-column="12" selection-end-line="223" selection-end-column="12" />
+        <state relative-caret-position="255">
+          <caret line="196" column="0" lean-forward="true" selection-start-line="196" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
           <folding>
             <element signature="e#118#129#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user_interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="807">
+          <caret line="406" column="66" lean-forward="false" selection-start-line="406" selection-start-column="66" selection-end-line="406" selection-end-column="66" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>

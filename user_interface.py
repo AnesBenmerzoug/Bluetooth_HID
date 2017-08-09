@@ -383,13 +383,8 @@ class PageTwo(Frame):
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
-def create_keyboard_process():
-    subprocess.Popen("python keyboard/keyboard_client.py", shell="True")
-    return
-
-
-def create_mouse_process():
-    subprocess.Popen("python mouse/mouse_client.py", shell="True")
+def create_devices_process():
+    subprocess.Popen("python devices_client.py", shell="True")
     return
 
 
@@ -409,11 +404,8 @@ if __name__ == "__main__":
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process)
     bluetoothProcess.start()
 
-    keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
-    keyboardProcess.start()
-
-    mouseProcess = multiprocessing.Process(target=create_mouse_process)
-    mouseProcess.start()
+    devicesProcess = multiprocessing.Process(target=create_devices_process)
+    devicesProcess.start()
 
     root = Tk()
     root.minsize(300, 400)
@@ -425,8 +417,7 @@ if __name__ == "__main__":
         main_application.mainloop()
     finally:
         print("Exiting user interface main loop")
-        keyboardProcess.terminate()
-        mouseProcess.terminate()
+        devicesProcess.terminate()
         bluetoothProcess.terminate()
 
     print("Closing Application")
