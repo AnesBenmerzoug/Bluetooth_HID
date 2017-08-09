@@ -52,7 +52,7 @@ class Device:
         self.bluetoothservice = self.bus.get_object('org.upwork.HidBluetoothService', "/org/upwork/HidBluetoothService")
         self.iface = dbus.Interface(self.bluetoothservice, 'org.upwork.HidBluetoothService')
 
-        print("Waiting for keyboard and mouse")
+        print("Waiting for Keyboard and Mouse")
 
         # keep trying to find a keyboard and/or a mouse
         self.keyboard = None
@@ -85,7 +85,6 @@ class Device:
                             print("device name is " + device.name)
                             self.mouse = InputDevice(device.fn)
                             have_mouse = True
-                            break
             except OSError:
                 print("Keyboard and/or Mouse not found, waiting 3 seconds and retrying")
                 time.sleep(3)
@@ -99,11 +98,10 @@ class Device:
                 self.combined_event_loop()
             elif have_keyboard:
                 print("Keyboard Found")
-                self.keyboard_event_loop()
+                #self.keyboard_event_loop()
             else:
                 print("Mouse Found")
                 self.combined_event_loop()
-                # take care of mouse buttons
 
     ####################################################################################################################
 
@@ -215,8 +213,8 @@ class Device:
                             self.change_keyboard_state(event)
                             try:
                                 self.send_keyboard_input()
-                            except dbus.DBusException as e:
-                                print(e)
+                            except:
+                                pass
 
                 else:
                     for event in self.mouse.read():
@@ -226,8 +224,8 @@ class Device:
                             self.change_state_movement(event)
                         try:
                             self.send_mouse_input()
-                        except dbus.DBusException as e:
-                            print(e)
+                        except :
+                            pass
 
 ########################################################################################################################
 
