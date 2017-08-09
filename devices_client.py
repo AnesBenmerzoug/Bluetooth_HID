@@ -63,7 +63,11 @@ class Device:
         count = 0
         NUMBER_OF_TRIES = 100
 
-        while (not have_keyboard or not have_mouse) and count < NUMBER_OF_TRIES:
+        while True:
+            if have_keyboard and have_mouse:
+                break
+            if count >= NUMBER_OF_TRIES:
+                break
             try:
                 # loop through all devices and try and get a keyboard and/or a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
