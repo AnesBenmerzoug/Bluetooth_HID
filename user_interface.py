@@ -186,6 +186,10 @@ class BluetoothService(dbus.service.Object):
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
 
+        print("Sending keyboard keystrokes:")
+        for key_code in keys:
+            print(str(key_code))
+
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x01)
