@@ -213,14 +213,21 @@ class Device:
                         # only bother if we hit a key and its an up or down event
                         if event.type == ecodes.EV_KEY and event.value < 2:
                             self.change_keyboard_state(event)
-                            self.send_keyboard_input()
+                            try:
+                                self.send_keyboard_input()
+                            except dbus.DBusException as e:
+                                print(e)
+
                 else:
                     for event in self.mouse.read():
                         if event.type == ecodes.EV_KEY and event.value < 2:
                             self.change_state_button(event)
                         elif event.type == ecodes.EV_REL:
                             self.change_state_movement(event)
-                        self.send_mouse_input()
+                        try:
+                            self.send_mouse_input()
+                        except dbus.DBusException as e:
+                            print(e)
 
 ########################################################################################################################
 
