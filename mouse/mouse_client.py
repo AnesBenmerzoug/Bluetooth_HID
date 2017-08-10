@@ -38,11 +38,12 @@ class Mouse:
         have_dev = False
         count = 0
         NUMBER_OF_TRIES = 100
+
         while have_dev is False and count < NUMBER_OF_TRIES:
             try:
                 # try and get a mouse - loop through all devices and try to find a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-                for device in devices:
+                for device in reversed(devices):
                     if "mouse" in device.name.lower():
                         print("Found a keyboard with the keyword 'mouse'")
                         print("device name is " + device.name)

@@ -52,11 +52,12 @@ class Keyboard:
         have_dev = False
         count = 0
         NUMBER_OF_TRIES = 100
+
         while have_dev is False and count < NUMBER_OF_TRIES:
             try:
                 # try and get a keyboard - loop through all devices and try to find a keyboard
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-                for device in devices:
+                for device in reversed(devices):
                     if "keyboard" in device.name.lower():
                         print("Found a keyboard with the keyword 'keyboard'")
                         print("device name is " + device.name)

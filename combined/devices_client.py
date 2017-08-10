@@ -4,14 +4,17 @@
 #
 #
 
-import dbus
-import dbus.service
-import dbus.mainloop.glib
 import time
+from select import select
+
+import dbus
+import dbus.mainloop.glib
+import dbus.service
 import evdev  # used to get input from the keyboard
 from evdev import InputDevice, ecodes
-from select import select
+
 import keymap  # used to map evdev input to hide key codes
+
 
 class Device:
     def __init__(self):
@@ -126,7 +129,6 @@ class Device:
 
     # take care of mouse movements
     def change_state_movement(self, event):
-        print("Mouse Movement")
         if event.code == ecodes.REL_X:
             self.mouse_state[3] = event.value & 0xFF
         elif event.code == ecodes.REL_Y:

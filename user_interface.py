@@ -186,10 +186,6 @@ class BluetoothService(dbus.service.Object):
     @dbus.service.method('org.upwork.HidBluetoothService', in_signature='yay')
     def send_keys(self, modifier_byte, keys):
 
-        print("Sending keyboard keystrokes:")
-        for key_code in keys:
-            print(key_code)
-
         cmd_str = ""
         cmd_str += chr(0xA1)
         cmd_str += chr(0x01)
@@ -392,8 +388,12 @@ class PageTwo(Frame):
             return
 
 
-def create_devices_process():
-    subprocess.Popen("python devices_client.py", shell="True")
+def create_keyboard_process():
+    subprocess.Popen("python keyboard/keyboard_client.py", shell="True")
+    return
+
+def create_mouse_process():
+    subprocess.Popen("python mouse/mouse_client.py", shell="True")
     return
 
 
@@ -413,8 +413,11 @@ if __name__ == "__main__":
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process)
     bluetoothProcess.start()
 
-    devicesProcess = multiprocessing.Process(target=create_devices_process)
-    devicesProcess.start()
+    keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
+    keyboardProcess.start()
+
+    mouseProcess = multiprocessing.Process(target=create_mouse_process)
+    mouseProcess.start()
 
     root = Tk()
     root.minsize(300, 400)
@@ -426,7 +429,7 @@ if __name__ == "__main__":
         main_application.mainloop()
     finally:
         print("Exiting user interface main loop")
-        devicesProcess.terminate()
+        keyboardProcess.terminate()
         bluetoothProcess.terminate()
 
     print("Closing Application")
