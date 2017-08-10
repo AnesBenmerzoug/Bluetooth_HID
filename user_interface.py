@@ -392,6 +392,7 @@ class PageTwo(Frame):
 
 def create_keyboard_process():
     subprocess.Popen("python keyboard/keyboard_client.py", shell="True")
+    print("something")
     return
 
 def create_mouse_process():
@@ -428,17 +429,16 @@ if __name__ == "__main__":
     root.maxsize(300, 400)
     main_application = App(root)
 
-    try:
-        print("Starting user interface main loop")
-        main_application.mainloop()
-    finally:
-        print("Exiting user interface main loop")
-        keyboardProcess.terminate()
-        mouseProcess.terminate()
-        bluetoothProcess.terminate()
+    print("Starting user interface main loop")
+    main_application.mainloop()
 
-        keyboardProcess.join()
-        mouseProcess.join()
-        bluetoothProcess.join()
+    print("Exiting user interface main loop")
+    keyboardProcess.terminate()
+    mouseProcess.terminate()
+    bluetoothProcess.terminate()
+
+    keyboardProcess.join()
+    mouseProcess.join()
+    bluetoothProcess.join()
 
     print("Closing Application")
