@@ -94,11 +94,7 @@ class Mouse:
                 self.change_state_button(event)
             elif event.type == ecodes.EV_REL:
                 self.change_state_movement(event)
-            try:
-                self.send_input()
-            except:
-                print("Couldn't send mouse movement/button press")
-                return
+            self.send_input()
 
     # forward mouse events to the dbus service
     def send_input(self):

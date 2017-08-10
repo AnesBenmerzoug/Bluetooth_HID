@@ -97,7 +97,7 @@ class Keyboard:
 
             # Get the keycode of the key
             hex_key = keymap.convert(ecodes.KEY[event.code])
-            print("Key " + str(ecodes.KEY[event.code]) + " was pressed")
+            print("Key " + str(ecodes.KEY[event.code]) + " was " + "pressed" if event.value == 1 else "released")
             # Loop through elements 4 to 9 of the input report structure
             for i in range(4, 10):
                 if self.state[i] == hex_key and event.value == 0:
@@ -114,11 +114,7 @@ class Keyboard:
             # only bother if we hit a key and its an up or down event
             if event.type == ecodes.EV_KEY and event.value < 2:
                 self.change_state(event)
-                try:
-                    self.send_input()
-                except:
-                    print("Couldn't send keystroke")
-                    return
+                self.send_input()
 
     # forward keyboard events to the dbus service
     def send_input(self):
