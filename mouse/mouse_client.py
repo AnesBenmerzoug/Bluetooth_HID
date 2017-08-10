@@ -94,16 +94,17 @@ class Mouse:
                 self.change_state_button(event)
             elif event.type == ecodes.EV_REL:
                 self.change_state_movement(event)
-            self.send_input()
+            try:
+                self.send_input()
+            except dbus.exceptions.DBusException as e:
+                print("Couldn't send mouse input")
+                print(e)
+                return
 
     # forward mouse events to the dbus service
     def send_input(self):
-        try:
-            self.iface.send_mouse(self.state[2], self.state[3:6])
-        except dbus.exceptions.DBusException as e:
-            print("Couldn't send mouse input")
-            print(e)
-            return
+        self.iface.send_mouse(self.state[2], self.state[3:6])
+
 
 
 if __name__ == "__main__":
