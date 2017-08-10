@@ -4,7 +4,6 @@
     <list default="true" id="471fad49-ebae-4645-9df6-fcfc776737b5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keyboard/keyboard_client.py" afterPath="$PROJECT_DIR$/keyboard/keyboard_client.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mouse/mouse_client.py" afterPath="$PROJECT_DIR$/mouse/mouse_client.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user_interface.py" afterPath="$PROJECT_DIR$/user_interface.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,7 +18,7 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="user_interface.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="user_interface.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/user_interface.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="586">
@@ -31,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="keyboard_client.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="keyboard_client.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="99" column="112" lean-forward="false" selection-start-line="99" selection-start-column="112" selection-end-line="99" selection-end-column="112" />
+            <state relative-caret-position="569">
+              <caret line="126" column="8" lean-forward="false" selection-start-line="126" selection-start-column="8" selection-end-line="127" selection-end-column="20" />
               <folding>
                 <element signature="e#296#307#0" expanded="true" />
               </folding>
@@ -46,8 +45,8 @@
       <file leaf-file-name="mouse_client.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="99" column="25" lean-forward="true" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
+            <state relative-caret-position="603">
+              <caret line="104" column="0" lean-forward="true" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
               <folding>
                 <element signature="e#101#112#0" expanded="true" />
               </folding>
@@ -107,9 +106,9 @@
         <option value="$PROJECT_DIR$/sdp_record.xml" />
         <option value="$PROJECT_DIR$/.idea/devices_client.py" />
         <option value="$PROJECT_DIR$/devices_client.py" />
-        <option value="$PROJECT_DIR$/mouse/mouse_client.py" />
         <option value="$PROJECT_DIR$/user_interface.py" />
         <option value="$PROJECT_DIR$/keyboard/keyboard_client.py" />
+        <option value="$PROJECT_DIR$/mouse/mouse_client.py" />
       </list>
     </option>
   </component>
@@ -858,10 +857,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="569">
+          <caret line="126" column="8" lean-forward="false" selection-start-line="126" selection-start-column="8" selection-end-line="127" selection-end-column="20" />
+          <folding>
+            <element signature="e#296#307#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="99" column="25" lean-forward="true" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
+        <state relative-caret-position="603">
+          <caret line="104" column="0" lean-forward="true" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
           <folding>
             <element signature="e#101#112#0" expanded="true" />
           </folding>
@@ -874,16 +883,6 @@
           <caret line="379" column="8" lean-forward="false" selection-start-line="379" selection-start-column="8" selection-end-line="379" selection-end-column="8" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="99" column="112" lean-forward="false" selection-start-line="99" selection-start-column="112" selection-end-line="99" selection-end-column="112" />
-          <folding>
-            <element signature="e#296#307#0" expanded="true" />
           </folding>
         </state>
       </provider>

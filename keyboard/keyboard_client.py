@@ -122,8 +122,10 @@ class Keyboard:
         element = self.state[2]
         for bit in element:
             bin_str += str(bit)
-        self.iface.send_keys(int(bin_str, 2), self.state[4:10])
-
+        try:
+            self.iface.send_keys(int(bin_str, 2), self.state[4:10])
+        except dbus.exceptions.DBusException as e:
+            print(e)
 
 if __name__ == "__main__":
     print("Setting up keyboard")

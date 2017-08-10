@@ -98,7 +98,10 @@ class Mouse:
 
     # forward mouse events to the dbus service
     def send_input(self):
-        self.iface.send_mouse(self.state[2], self.state[3:6])
+        try:
+            self.iface.send_mouse(self.state[2], self.state[3:6])
+        except dbus.exceptions.DBusException as e:
+            print(e)
 
 
 if __name__ == "__main__":
