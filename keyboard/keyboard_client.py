@@ -111,16 +111,15 @@ class Keyboard:
 
     # poll for keyboard events
     def event_loop(self):
-        try:
-            for event in self.dev.read_loop():
-                # only bother if we hit a key and its an up or down event
-                if event.type == ecodes.EV_KEY and event.value < 2:
-                    self.change_state(event)
-                    p
+        for event in self.dev.read_loop():
+            # only bother if we hit a key and its an up or down event
+            if event.type == ecodes.EV_KEY and event.value < 2:
+                self.change_state(event)
+                try:
                     self.send_input()
-        except:
-            print("Couldn't send keyboard input")
-            sys.exit()
+                except:
+                    print("Couldn't send keyboard input")
+                    break
 
     # forward keyboard events to the dbus service
     def send_input(self):
