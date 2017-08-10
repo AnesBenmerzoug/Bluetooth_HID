@@ -116,6 +116,7 @@ class Keyboard:
                 # only bother if we hit a key and its an up or down event
                 if event.type == ecodes.EV_KEY and event.value < 2:
                     self.change_state(event)
+                    p
                     self.send_input()
         except:
             print("Couldn't send keyboard input")
