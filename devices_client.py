@@ -77,12 +77,14 @@ class Device:
                         elif "gh60" in device.name.lower():
                             print("Found a Keyboard with the keyword 'gh60'")
                             print("device name is " + device.name)
+                            print(device.fn)
                             self.keyboard = InputDevice(device.fn)
                             have_keyboard = True
                     if not have_mouse:
                         if "mouse" in device.name.lower():
                             print("Found a Mouse with the keyword 'mouse'")
                             print("device name is " + device.name)
+                            print(device.fn)
                             self.mouse = InputDevice(device.fn)
                             have_mouse = True
             except OSError:

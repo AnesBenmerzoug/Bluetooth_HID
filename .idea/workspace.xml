@@ -56,8 +56,8 @@
       <file leaf-file-name="devices_client.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/devices_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="180" column="24" lean-forward="false" selection-start-line="180" selection-start-column="24" selection-end-line="180" selection-end-column="24" />
+            <state relative-caret-position="527">
+              <caret line="86" column="44" lean-forward="false" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
               <folding>
                 <element signature="e#118#129#0" expanded="true" />
               </folding>
@@ -867,8 +867,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/devices_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="180" column="24" lean-forward="false" selection-start-line="180" selection-start-column="24" selection-end-line="180" selection-end-column="24" />
+        <state relative-caret-position="527">
+          <caret line="86" column="44" lean-forward="false" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
           <folding>
             <element signature="e#118#129#0" expanded="true" />
           </folding>
