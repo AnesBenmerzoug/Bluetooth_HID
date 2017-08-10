@@ -30,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="keyboard_client.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="keyboard_client.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="121" column="26" lean-forward="false" selection-start-line="119" selection-start-column="20" selection-end-line="121" selection-end-column="26" />
+            <state relative-caret-position="81">
+              <caret line="99" column="115" lean-forward="true" selection-start-line="99" selection-start-column="115" selection-end-line="99" selection-end-column="115" />
               <folding>
                 <element signature="e#296#307#0" expanded="true" />
               </folding>
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mouse_client.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="mouse_client.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="97" column="4" lean-forward="false" selection-start-line="97" selection-start-column="4" selection-end-line="97" selection-end-column="4" />
+            <state relative-caret-position="472">
+              <caret line="100" column="21" lean-forward="false" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
               <folding>
                 <element signature="e#101#112#0" expanded="true" />
               </folding>
@@ -109,8 +109,8 @@
         <option value="$PROJECT_DIR$/.idea/devices_client.py" />
         <option value="$PROJECT_DIR$/devices_client.py" />
         <option value="$PROJECT_DIR$/user_interface.py" />
-        <option value="$PROJECT_DIR$/keyboard/keyboard_client.py" />
         <option value="$PROJECT_DIR$/mouse/mouse_client.py" />
+        <option value="$PROJECT_DIR$/keyboard/keyboard_client.py" />
       </list>
     </option>
   </component>
@@ -867,22 +867,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
+    <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="121" column="26" lean-forward="false" selection-start-line="119" selection-start-column="20" selection-end-line="121" selection-end-column="26" />
+        <state relative-caret-position="472">
+          <caret line="100" column="21" lean-forward="false" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
           <folding>
-            <element signature="e#296#307#0" expanded="true" />
+            <element signature="e#101#112#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
+    <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="97" column="4" lean-forward="false" selection-start-line="97" selection-start-column="4" selection-end-line="97" selection-end-column="4" />
+        <state relative-caret-position="81">
+          <caret line="99" column="115" lean-forward="true" selection-start-line="99" selection-start-column="115" selection-end-line="99" selection-end-column="115" />
           <folding>
-            <element signature="e#101#112#0" expanded="true" />
+            <element signature="e#296#307#0" expanded="true" />
           </folding>
         </state>
       </provider>

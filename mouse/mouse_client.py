@@ -96,10 +96,9 @@ class Mouse:
                 self.change_state_movement(event)
             try:
                 self.send_input()
-            except dbus.exceptions.DBusException as e:
+            except:
                 print("Couldn't send mouse input")
-                print(e)
-                return
+                break
 
     # forward mouse events to the dbus service
     def send_input(self):
