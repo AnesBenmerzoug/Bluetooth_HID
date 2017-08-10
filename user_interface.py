@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 import gtk
 from dbus.mainloop.glib import DBusGMainLoop
+from Queue import Empty
 
 import subprocess
 import multiprocessing
@@ -150,6 +151,9 @@ class BluetoothDevice():
         global connection_status_queue
         connection_status_queue.put("Connected")
 
+        global connected
+        connected = True
+
     # send a string to the bluetooth host machine
     def send_string(self, message):
         try:
@@ -161,6 +165,8 @@ class BluetoothDevice():
     def close(self):
         global connection_status_queue
         connection_status_queue.put("Disconnected")
+        global connected
+        connected = False
         self.scontrol.close()
         self.sinterrupt.close()
 
@@ -298,7 +304,7 @@ class ConnectionStatusLabel(Label):
         try:
             global connection_status_queue
             self.text = connection_status_queue.get(True, 0.1)
-        except:
+        except Empty:
             pass
         self.configure(text=self.text)
         if self.text == "Connected":
@@ -370,14 +376,17 @@ class PageTwo(Frame):
 
         def sender(event):
             print("button " + str(button_id) + " was pressed")
-            self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
-
+            global connected
+            if connected:
+                self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
 
         return sender
 
     def on_release(self, event):
         print("button was released")
-        self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        global connected
+        if connected:
+            self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
 
@@ -403,6 +412,8 @@ if __name__ == "__main__":
     connection_status_queue = multiprocessing.Manager().Queue()
     connection_status_queue.put("Disconnected")
 
+    connected = False
+
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process)
     bluetoothProcess.start()
 
@@ -423,6 +434,11 @@ if __name__ == "__main__":
     finally:
         print("Exiting user interface main loop")
         keyboardProcess.terminate()
+        mouseProcess.terminate()
         bluetoothProcess.terminate()
+
+        keyboardProcess.join()
+        mouseProcess.join()
+        bluetoothProcess.join()
 
     print("Closing Application")
