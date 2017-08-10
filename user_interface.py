@@ -14,6 +14,7 @@ from Queue import Empty
 import subprocess
 import multiprocessing
 
+import atexit
 
 #####################################################################################################
 
@@ -391,15 +392,11 @@ class PageTwo(Frame):
 
 
 def create_keyboard_process():
-    process = subprocess.Popen("python keyboard/keyboard_client.py", shell="True")
-    process.wait()
+    subprocess.call("python keyboard/keyboard_client.py", shell="True")
     return
 
 def create_mouse_process():
-    process = subprocess.Popen("python mouse/mouse_client.py", shell="True")
-    print("Finished")
-    process.wait()
-    print("Done")
+    subprocess.call("python mouse/mouse_client.py", shell="True")
     return
 
 
@@ -410,7 +407,6 @@ def create_bluetooth_server_process():
         gtk.main()
     finally:
         return
-
 
 if __name__ == "__main__":
     connection_status_queue = multiprocessing.Manager().Queue()

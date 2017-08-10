@@ -13,6 +13,7 @@ import time
 import evdev  # used to get input from the keyboard
 from evdev import InputDevice, ecodes
 import keymap  # used to map evdev input to hide key codes
+import sys
 
 
 # Define a client to listen to local key events
@@ -110,15 +111,15 @@ class Keyboard:
 
     # poll for keyboard events
     def event_loop(self):
-        for event in self.dev.read_loop():
-            # only bother if we hit a key and its an up or down event
-            if event.type == ecodes.EV_KEY and event.value < 2:
-                self.change_state(event)
-                try:
+        try:
+            for event in self.dev.read_loop():
+                # only bother if we hit a key and its an up or down event
+                if event.type == ecodes.EV_KEY and event.value < 2:
+                    self.change_state(event)
                     self.send_input()
-                except:
-                    print("Couldn't send keyboard input")
-                    break
+        except:
+            print("Couldn't send keyboard input")
+            sys.exit()
 
     # forward keyboard events to the dbus service
     def send_input(self):
