@@ -67,22 +67,22 @@ class Device:
             try:
                 # loop through all devices and try and get a keyboard and/or a mouse
                 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
-                for device in devices:
+                for device in reversed(devices):
                     if not have_keyboard:
-                        if "keyboard" in device.name.lower()[::-1]:
+                        if "keyboard" in device.name.lower():
                             print("Found a Keyboard with the keyword 'keyboard'")
                             print("device name is " + device.name)
                             print(device.fn)
                             self.keyboard = InputDevice(device.fn)
                             have_keyboard = True
-                        elif "gh60" in device.name.lower()[::-1]:
+                        elif "gh60" in device.name.lower():
                             print("Found a Keyboard with the keyword 'gh60'")
                             print("device name is " + device.name)
                             print(device.fn)
                             self.keyboard = InputDevice(device.fn)
                             have_keyboard = True
                     if not have_mouse:
-                        if "mouse" in device.name.lower()[::-1]:
+                        if "mouse" in device.name.lower():
                             print("Found a Mouse with the keyword 'mouse'")
                             print("device name is " + device.name)
                             print(device.fn)
