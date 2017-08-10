@@ -101,7 +101,9 @@ class Mouse:
         try:
             self.iface.send_mouse(self.state[2], self.state[3:6])
         except dbus.exceptions.DBusException as e:
+            print("Couldn't send mouse input")
             print(e)
+            return
 
 
 if __name__ == "__main__":

@@ -125,7 +125,9 @@ class Keyboard:
         try:
             self.iface.send_keys(int(bin_str, 2), self.state[4:10])
         except dbus.exceptions.DBusException as e:
+            print("Couldn't send keyboard input")
             print(e)
+            return
 
 if __name__ == "__main__":
     print("Setting up keyboard")
