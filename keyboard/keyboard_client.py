@@ -13,8 +13,6 @@ import time
 import evdev  # used to get input from the keyboard
 from evdev import InputDevice, ecodes
 import keymap  # used to map evdev input to hide key codes
-import sys
-
 
 # Define a client to listen to local key events
 class Keyboard:

@@ -152,9 +152,6 @@ class BluetoothDevice():
         global connection_status_queue
         connection_status_queue.put("Connected")
 
-        global connected
-        connected = True
-
     # send a string to the bluetooth host machine
     def send_string(self, message):
         try:
@@ -166,8 +163,6 @@ class BluetoothDevice():
     def close(self):
         global connection_status_queue
         connection_status_queue.put("Disconnected")
-        global connected
-        connected = False
         self.scontrol.close()
         self.sinterrupt.close()
 
@@ -377,17 +372,13 @@ class PageTwo(Frame):
 
         def sender(event):
             print("button " + str(button_id) + " was pressed")
-            global connected
-            if connected:
-                self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
+            self.iface.send_keys(0x00, [button_id + shift, 0x00, 0x00, 0x00, 0x00, 0x00])
 
         return sender
 
     def on_release(self, event):
         print("button was released")
-        global connected
-        if connected:
-            self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
 
@@ -411,8 +402,6 @@ def create_bluetooth_server_process():
 if __name__ == "__main__":
     connection_status_queue = multiprocessing.Manager().Queue()
     connection_status_queue.put("Disconnected")
-
-    connected = False
 
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process)
     bluetoothProcess.start()
