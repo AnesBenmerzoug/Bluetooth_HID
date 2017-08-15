@@ -14,7 +14,8 @@ from Queue import Empty
 import subprocess
 import multiprocessing
 
-import atexit
+from keyboard.keyboard_client import Keyboard
+from mouse.mouse_client import Mouse
 
 #####################################################################################################
 
@@ -406,10 +407,10 @@ if __name__ == "__main__":
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process)
     bluetoothProcess.start()
 
-    keyboardProcess = multiprocessing.Process(target=create_keyboard_process)
+    keyboardProcess = multiprocessing.Process(target=Keyboard)
     keyboardProcess.start()
 
-    mouseProcess = multiprocessing.Process(target=create_mouse_process)
+    mouseProcess = multiprocessing.Process(target=Mouse)
     mouseProcess.start()
 
     root = Tk()

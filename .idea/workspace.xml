@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="471fad49-ebae-4645-9df6-fcfc776737b5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keyboard/keyboard_client.py" afterPath="$PROJECT_DIR$/keyboard/keyboard_client.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/user_interface.py" afterPath="$PROJECT_DIR$/user_interface.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,8 +21,8 @@
       <file leaf-file-name="user_interface.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/user_interface.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="397" column="18" lean-forward="true" selection-start-line="397" selection-start-column="18" selection-end-line="397" selection-end-column="18" />
+            <state relative-caret-position="1011">
+              <caret line="407" column="28" lean-forward="true" selection-start-line="407" selection-start-column="28" selection-end-line="407" selection-end-column="28" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -33,8 +33,8 @@
       <file leaf-file-name="keyboard_client.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+            <state relative-caret-position="1615">
+              <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding>
                 <element signature="e#296#307#0" expanded="true" />
               </folding>
@@ -45,7 +45,7 @@
       <file leaf-file-name="mouse_client.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="472">
+            <state relative-caret-position="1615">
               <caret line="100" column="21" lean-forward="false" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
               <folding>
                 <element signature="e#101#112#0" expanded="true" />
@@ -112,6 +112,7 @@
         <option value="$PROJECT_DIR$/mouse/mouse_client.py" />
         <option value="$PROJECT_DIR$/keyboard/keyboard_client.py" />
         <option value="$PROJECT_DIR$/keyboard/shapes.py" />
+        <option value="$PROJECT_DIR$/keyboard/__init__.py" />
         <option value="$PROJECT_DIR$/user_interface.py" />
       </list>
     </option>
@@ -207,6 +208,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -221,17 +223,18 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID\combined" />
       <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID" />
       <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID\server" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID\server" />
+      <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID\mouse" />
+      <recent name="D:\Projects\Bluetooth_HID_Keyboard\Bluetooth_HID" />
     </key>
   </component>
   <component name="RunManager" selected="Python.user_interface">
@@ -479,39 +482,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="54" column="8" lean-forward="false" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="8" />
-          <folding>
-            <element signature="e#101#112#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/bluetooth_daemon_configuration.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="38" lean-forward="false" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/user_interface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7174">
-          <caret line="422" column="0" lean-forward="false" selection-start-line="422" selection-start-column="0" selection-end-line="422" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bluetooth_daemon_configuration.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="561">
           <caret line="33" column="0" lean-forward="true" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -529,7 +503,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4165">
           <caret line="245" column="8" lean-forward="false" selection-start-line="245" selection-start-column="8" selection-end-line="245" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -547,7 +520,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="17" lean-forward="true" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -565,7 +537,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="714">
           <caret line="42" column="5" lean-forward="false" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -590,7 +561,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -598,7 +568,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2686">
           <caret line="167" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="167" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -626,7 +595,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="680">
           <caret line="40" column="5" lean-forward="false" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -651,7 +619,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -659,7 +626,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3842">
           <caret line="235" column="8" lean-forward="true" selection-start-line="235" selection-start-column="8" selection-end-line="235" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -687,7 +653,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -712,7 +677,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -720,7 +684,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1343">
           <caret line="88" column="88" lean-forward="false" selection-start-line="88" selection-start-column="88" selection-end-line="88" selection-end-column="88" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -749,7 +712,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4012">
           <caret line="245" column="8" lean-forward="false" selection-start-line="245" selection-start-column="8" selection-end-line="245" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -771,7 +733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -779,7 +740,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
           <caret line="6" column="38" lean-forward="false" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -787,7 +747,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="178">
           <caret line="104" column="28" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -803,9 +762,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="28" column="23" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="431" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#21#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -813,7 +769,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1301">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -821,23 +776,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2695">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/combined/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/combined/__init__.py" />
     <entry file="file://$PROJECT_DIR$/combined/devices_client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2414">
           <caret line="182" column="24" lean-forward="true" selection-start-line="182" selection-start-column="24" selection-end-line="182" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -845,13 +791,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1488">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mouse/mouse_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="472">
+        <state relative-caret-position="1615">
           <caret line="100" column="21" lean-forward="false" selection-start-line="100" selection-start-column="21" selection-end-line="100" selection-end-column="21" />
           <folding>
             <element signature="e#101#112#0" expanded="true" />
@@ -859,18 +804,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/keyboard/shapes.py">
+    <entry file="file://$PROJECT_DIR$/keyboard/shapes.py" />
+    <entry file="file://$PROJECT_DIR$/server/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="10" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/keyboard/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mouse/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/user_interface.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="397" column="18" lean-forward="true" selection-start-line="397" selection-start-column="18" selection-end-line="397" selection-end-column="18" />
+        <state relative-caret-position="1011">
+          <caret line="407" column="28" lean-forward="true" selection-start-line="407" selection-start-column="28" selection-end-line="407" selection-end-column="28" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
@@ -879,8 +841,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/keyboard/keyboard_client.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="95" column="0" lean-forward="true" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+        <state relative-caret-position="1615">
+          <caret line="95" column="0" lean-forward="false" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
           <folding>
             <element signature="e#296#307#0" expanded="true" />
           </folding>
