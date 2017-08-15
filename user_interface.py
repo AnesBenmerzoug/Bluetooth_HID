@@ -382,16 +382,6 @@ class PageTwo(Frame):
         self.iface.send_keys(0x00, [0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
 
-
-def create_keyboard_process():
-    subprocess.call("python keyboard/keyboard_client.py", shell="True")
-    return
-
-def create_mouse_process():
-    subprocess.call("python mouse/mouse_client.py", shell="True")
-    return
-
-
 def create_bluetooth_server_process():
     try:
         DBusGMainLoop(set_as_default=True)
@@ -401,18 +391,23 @@ def create_bluetooth_server_process():
         return
 
 if __name__ == "__main__":
+    # Variable used to update the user interface's Connection Status Label
     connection_status_queue = multiprocessing.Manager().Queue()
     connection_status_queue.put("Disconnected")
 
+    # Bluetooth DBus Service that will receive inputs from Keyboard and Mouse and send them via Bluetooth
     bluetoothProcess = multiprocessing.Process(target=create_bluetooth_server_process)
     bluetoothProcess.start()
 
+    # Keyboard process
     keyboardProcess = multiprocessing.Process(target=Keyboard)
     keyboardProcess.start()
 
+    # Mouse process
     mouseProcess = multiprocessing.Process(target=Mouse)
     mouseProcess.start()
 
+    # User Interface
     root = Tk()
     root.minsize(300, 400)
     root.maxsize(300, 400)
@@ -420,12 +415,14 @@ if __name__ == "__main__":
 
     print("Starting user interface main loop")
     main_application.mainloop()
-
     print("Exiting user interface main loop")
+
+    # Terminate all processes
     keyboardProcess.terminate()
     mouseProcess.terminate()
     bluetoothProcess.terminate()
 
+    # Wait for the processes to be terminated
     keyboardProcess.join()
     mouseProcess.join()
     bluetoothProcess.join()
