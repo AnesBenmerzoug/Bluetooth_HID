@@ -1,3 +1,5 @@
+# **This repository is archived and is no longer being maintained**
+
 # Bluetooth_HID
 
 A program used to make a Raspberry Pi emulate a keyboard/mouse Bluetooth HID client.
